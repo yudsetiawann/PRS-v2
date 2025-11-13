@@ -14,7 +14,7 @@
     rel="stylesheet">
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
-  <style type="text/css">
+  {{-- <style type="text/css">
     * {
       cursor: url(https://ani.cursors-4u.net/cursors/cur-13/cur1156.ani),
         url(https://ani.cursors-4u.net/cursors/cur-13/cur1156.png),
@@ -34,7 +34,7 @@
     [x-cloak] {
       display: none !important;
     }
-  </style>
+  </style> --}}
 </head>
 
 <body class="h-full bg-gray-700"> {{-- bg-[url(/public/img/bg3.jpg)] bg-cover bg-center --}}

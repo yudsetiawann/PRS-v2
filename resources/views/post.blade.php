@@ -1,97 +1,98 @@
-{{-- <x-layout :title="$title">
-
-  <main class="pt-8 pb-16 lg:pt-16 lg:pb-24 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 antialiased">
-    <div class="flex justify-between px-4 mx-auto max-w-screen-xl">
-      <article
-        class="mx-auto w-full max-w-4xl p-6 border-4 border-yellow-400 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] bg-white format format-sm sm:format-base lg:format-lg format-blue dark:format-invert rounded-sm">
-
-        <a href="/posts" class="font-medium text-xs text-blue-500 hover:underline">&laquo; Back to all posts</a>
-        <header class="my-4 lg:mb-6 not-format">
-          <address class="flex items-center mb-6 not-italic">
-            <div class="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white">
-              <img class="mr-4 w-16 h-16 rounded-full"
-                src="{{ $post->author->avatar ? asset('storage/' . $post->author->avatar) : asset('img/default-avatar.jpg') }}"
-                alt="{{ $post->author->name }}">
-              <div>
-                <a href="/authors/{{ $post->author->username }}" rel="author"
-                  class="text-xl font-bold text-gray-900 dark:text-white">{{ $post->author->name }}</a>
-                <a class="block" href="/categories/{{ $post->category->slug }}">
-                  <span
-                    class="{{ $post->category->color }} text-grey-600 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded dark:bg-primary-200 dark:text-primary-800">
-                    {{ $post->category->name }}
-                  </span>
-                </a>
-                <p class="text-base text-gray-500 dark:text-gray-400"><time pubdate datetime="2022-02-08"
-                    title="February 8th, 2022">{{ $post->created_at->diffForHumans() }}</time></p>
-              </div>
-            </div>
-          </address>
-          <h1 class="mb-4 text-3xl font-extrabold leading-tight text-gray-900 lg:mb-6 lg:text-4xl dark:text-white">
-            {{ $post->title }}</h1>
-        </header>
-        <div>{!! $post['body'] !!}</div>
-      </article>
-    </div>
-  </main>
-</x-layout> --}}
-
 <x-layout :title="$title">
-  <main class="pt-8 pb-16 lg:pt-16 lg:pb-24 antialiased">
-    <div class="flex justify-between px-4 mx-auto max-w-screen-xl">
-      <article
-        class="mx-auto w-full max-w-4xl p-6 border-4 border-yellow-400 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] bg-white format format-sm sm:format-base lg:format-lg format-blue dark:format-invert rounded-sm">
+  <section class="pt-20 min-h-screen bg-slate-900 pb-24 relative overflow-hidden">
 
+    <div class="fixed top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
+      <div
+        class="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-indigo-600/20 rounded-full mix-blend-screen filter blur-[120px] opacity-30">
+      </div>
+      <div
+        class="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-cyan-600/10 rounded-full mix-blend-screen filter blur-[100px] opacity-20">
+      </div>
+    </div>
 
-        <a href="/posts" class="inline-flex cursor-pointer">
-          {{-- Icon (Selalu tampil) --}}
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-            class="size-12 text-blue-500 transform transition duration-200 hover:scale-105 md:hidden">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-          </svg>
-          {{-- Teks cuma di md ke atas --}}
-          <span
-            class="hidden md:inline bg-blue-500 text-xs tracking-tight text-white border-blue-800 shadow-[4px_4px_0px_rgba(0,0,0,1)] rounded-sm items-center gap-2 m-2 px-2 py-2 hover:bg-blue-400 border-b-4 transform transition duration-200 hover:scale-105 no-underline"
-            style="font-family:'Fira Mono', monospace;">&laquo;
-            Back to All Posts</span>
+    <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 lg:pt-12">
+
+      <div class="mb-8 lg:mb-12">
+        <a href="/posts"
+          class="group inline-flex items-center text-sm font-medium text-slate-400 hover:text-white transition-colors duration-200">
+          <div
+            class="mr-3 flex h-8 w-8 items-center justify-center rounded-full bg-slate-800 border border-slate-700 group-hover:border-indigo-500/50 group-hover:bg-indigo-500/10 transition-all">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+              stroke="currentColor" class="w-4 h-4 text-slate-300 group-hover:text-indigo-400 transition-colors">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+            </svg>
+          </div>
+          Kembali ke Semua Post
         </a>
+      </div>
 
-        <header class="my-4 lg:mb-6 not-format">
-          <address class="flex items-center mb-6 not-italic">
-            <div class="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white">
-              <img class="mr-4 w-16 h-16 rounded-full border-2 border-yellow-400 dark:border-white  object-cover"
+      <header class="text-center mb-10 lg:mb-14">
+        <div class="mb-6">
+          <a href="/posts?category={{ $post->category->slug }}">
+            <span
+              class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold tracking-wide uppercase bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 hover:bg-indigo-500/20 transition-colors duration-300">
+              {{ $post->category->name }}
+            </span>
+          </a>
+        </div>
+
+        <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight leading-tight mb-8">
+          {{ $post->title }}
+        </h1>
+
+        <div class="flex items-center justify-center gap-4 text-left">
+          <a href="/userprof/{{ $post->author->username }}" class="group flex items-center gap-3">
+            <div class="relative">
+              <img
+                class="w-12 h-12 rounded-full object-cover ring-2 ring-slate-700 group-hover:ring-indigo-500 transition-all duration-300"
                 src="{{ $post->author->avatar ? asset('storage/' . $post->author->avatar) : asset('img/default-avatar.jpg') }}"
                 alt="{{ $post->author->name }}">
-
-              <div>
-                <a href="/userprof/{{ $post->author->username }}" rel="author"
-                  class="text-lg text-gray-900 font-bold cursor-pointer">{{ $post->author->name }}</a>
-
-                <a class="block mt-1" href="/posts?category={{ $post->category->slug }}">
-                  <span
-                    class="{{ $post->category->color }} text-xs inline-flex items-center px-2.5 py-0.5 rounded dark:bg-primary-200 dark:text-primary-800">
-                    {{ $post->category->name }}
-                  </span>
-                </a>
-
-                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                  <time pubdate datetime="{{ $post->created_at }}">
-                    {{ $post->created_at->format('d M Y') }}
-                  </time>
-                </p>
+            </div>
+            <div>
+              <p class="text-sm font-semibold text-white group-hover:text-indigo-400 transition-colors">
+                {{ $post->author->name }}
+              </p>
+              <div class="flex items-center text-xs text-slate-400 gap-2">
+                <time datetime="{{ $post->created_at }}">{{ $post->created_at->format('d M Y') }}</time>
+                <span class="w-1 h-1 rounded-full bg-slate-600"></span>
+                <span>{{ $post->created_at->diffForHumans() }}</span>
               </div>
             </div>
-          </address>
+          </a>
+        </div>
+      </header>
 
-          <h1
-            class="mb-4 text-3xl font-extrabold text-center leading-tight text-gray-900 lg:mb-8 lg:text-4xl dark:text-white">
-            "{{ $post->title }}"</h1>
-        </header>
+      <article class="relative">
+        <div class="absolute inset-0 bg-gradient-to-b from-slate-800/50 to-transparent rounded-3xl -z-10 blur-sm"></div>
 
-        <div>{!! $post->body !!}</div>
+        <div
+          class="bg-slate-800/30 backdrop-blur-md border border-slate-700/50 rounded-3xl p-6 md:p-10 lg:p-12 shadow-2xl">
+
+          <div
+            class="prose prose-lg prose-invert prose-headings:text-white prose-a:text-indigo-400 prose-a:no-underline hover:prose-a:underline prose-strong:text-white prose-blockquote:border-l-indigo-500 prose-blockquote:bg-slate-800/50 prose-blockquote:py-2 prose-blockquote:px-4 prose-blockquote:rounded-r-lg max-w-none text-slate-300 leading-relaxed">
+            {!! $post->body !!}
+          </div>
+
+          <div class="mt-12 pt-8 border-t border-slate-700/50 flex justify-between items-center">
+            <div class="text-slate-500 text-sm italic">
+              Terima kasih telah membaca.
+            </div>
+            <div class="flex gap-2">
+              <button
+                class="p-2 rounded-full bg-slate-700/50 hover:bg-indigo-600 text-slate-300 hover:text-white transition-colors">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path
+                    d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+        </div>
       </article>
+
     </div>
-  </main>
+  </section>
 
   <x-footer />
 </x-layout>

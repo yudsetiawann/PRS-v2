@@ -1,6 +1,6 @@
 <x-layout :title="$title">
   {{-- Our Story --}}
-  <section class="bg-gray-500">
+  <section class="pt-20 bg-gray-500">
     <div class="flex flex-col lg:flex-row md:flex-row py-8 px-4 mx-auto max-w-screen-xl lg:py-8">
       <div class="relative -top-10 md:my-auto">
         <img src="{{ asset('img/people-pixel.png') }}" alt="pixel-people" class="w-180 object-contain">

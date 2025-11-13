@@ -1,96 +1,152 @@
-<nav class="bg-gray-800 sticky top-0 z-50 backdrop-blur-md transition duration-300">
+<nav x-data="{ buka: false, scrolled: false }" @scroll.window="scrolled = (window.pageYOffset > 20)"
+  :class="{ 'bg-slate-900/80 shadow-lg backdrop-blur-md': scrolled, 'bg-slate-900/60 backdrop-blur-sm': !scrolled }"
+  class="fixed top-0 w-full z-50 border-b border-slate-700/50 transition-all duration-300">
+
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
     <div class="flex h-16 items-center justify-between">
-      <div class="flex items-center">
-        <div class="flex shrink-0">
-          <img class="size-11 md:size-12" src="{{ asset('img/PRS.png') }}" alt="Pixel Rhythm Society" />
-          <h2
-            class="ml-2 my-3 text-[15px] md:text-[18px] font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-yellow-500 to-indigo-700"
-            style="font-family: 'Press Start 2P', monospace;">PRS</h2>
-        </div>
-        <div class="hidden md:block">
-          <div class="ml-10 flex items-baseline space-x-4" style="font-family: 'Press start 2P';">
-            <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-            <x-my-nav-link href="/" :current="request()->is('/')">Home</x-my-nav-link>
-            <x-my-nav-link href="/posts" :current="request()->is('posts')">Blog</x-my-nav-link>
-            <x-my-nav-link href="/about" :current="request()->is('about')">About</x-my-nav-link>
-            <x-my-nav-link href="/contact" :current="request()->is('contact')">Contact Us</x-my-nav-link>
 
+      <div class="flex items-center gap-8">
+        <a href="/" class="flex shrink-0 items-center gap-3 group">
+          <div class="relative">
+            <div
+              class="absolute -inset-1 bg-indigo-500 rounded-full opacity-0 group-hover:opacity-50 blur transition duration-500">
+            </div>
+            <img class="relative size-10 md:size-11 transition-transform duration-300 group-hover:scale-105"
+              src="{{ asset('img/PRS.png') }}" alt="Pixel Rhythm Society" />
+          </div>
+
+          <h2
+            class="text-xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400 transition-all duration-300 group-hover:to-indigo-300">
+            PRS
+          </h2>
+        </a>
+
+        <div class="hidden md:block">
+          <div class="flex items-baseline space-x-3">
+            <x-my-nav-link href="/" :current="request()->is('/')"
+              class="px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 {{ request()->is('/') ? 'text-white bg-white/10' : 'text-slate-300 hover:text-white hover:bg-white/5' }}">
+              Home
+            </x-my-nav-link>
+            <x-my-nav-link href="/posts" :current="request()->is('posts')"
+              class="px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 {{ request()->is('posts') ? 'text-white bg-white/10' : 'text-slate-300 hover:text-white hover:bg-white/5' }}">
+              Blog
+            </x-my-nav-link>
+            <x-my-nav-link href="/about" :current="request()->is('about')"
+              class="px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 {{ request()->is('about') ? 'text-white bg-white/10' : 'text-slate-300 hover:text-white hover:bg-white/5' }}">
+              About
+            </x-my-nav-link>
+            <x-my-nav-link href="/contact" :current="request()->is('contact')"
+              class="px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 {{ request()->is('contact') ? 'text-white bg-white/10' : 'text-slate-300 hover:text-white hover:bg-white/5' }}">
+              Contact
+            </x-my-nav-link>
           </div>
         </div>
       </div>
+
       <div class="hidden md:block">
         <div class="ml-4 flex items-center md:ml-6">
 
-          <!-- Profile dropdown -->
           @if (Auth::check())
-            <div class="relative ml-3 x-data="{ buka: false }"">
+            <div class="relative ml-3" x-data="{ open: false }">
               <div>
-                <button type="button" @click="buka= !buka"
-                  class="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-hidden focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-gray-800 group cursor-pointer"
+                <button type="button" @click="open = !open" @click.away="open = false"
+                  class="relative flex max-w-xs items-center rounded-full bg-slate-800 text-sm focus:outline-none ring-2 ring-slate-700 hover:ring-indigo-500 transition-all duration-300 group"
                   id="user-menu-button" aria-expanded="false" aria-haspopup="true">
-                  <span class="absolute -inset-1.5"></span>
-                  <span class="sr-only">Open user menu</span>
-                  <img class="size-8 rounded-full object-cover border-2 border-violet-400"
+
+                  <img class="size-9 rounded-full object-cover"
                     src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : asset('img/default-avatar.jpg') }}"
                     alt="{{ Auth::user()->name }}" />
-                  <div class="flex text-gray-300 text-sm font-medium ml-3 transform transition duration-200 group-hover:scale-103 group-hover:text-white" style="font-family: 'Press start 2P';">
-                    {{ Auth::user()->name }}</div>
-                  <div class="ms-1 text-gray-300 transform transition duration-200 group-hover:scale-105 group-hover:text-white">
-                    <svg class="fill-current size-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                      <path fill-rule="evenodd"
-                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                        clip-rule="evenodd" />
-                    </svg>
-                  </div>
+
+                  <span
+                    class="hidden lg:block ml-3 mr-2 text-sm font-medium text-slate-300 group-hover:text-white transition-colors">
+                    {{ Auth::user()->name }}
+                  </span>
+
+                  <svg class="hidden lg:block w-4 h-4 text-slate-500 group-hover:text-white transition-colors mr-2"
+                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
                 </button>
               </div>
 
-              <div x-show="buka" x-cloak @click.away="buka = false" x-transition:enter="transition ease-out duration-100 transform"
-                x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
-                x-transition:leave="transition ease-in duration-75 transform"
-                x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95"
-                class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black/5 focus:outline-hidden"
+              <div x-show="open" x-cloak x-transition:enter="transition ease-out duration-200 transform"
+                x-transition:enter-start="opacity-0 scale-95 -translate-y-2"
+                x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                x-transition:leave="transition ease-in duration-150 transform"
+                x-transition:leave-start="opacity-100 scale-100 translate-y-0"
+                x-transition:leave-end="opacity-0 scale-95 -translate-y-2"
+                class="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-xl bg-slate-800/90 backdrop-blur-xl py-2 shadow-2xl ring-1 ring-slate-700 focus:outline-none border border-slate-700/50"
                 role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
-                <a href="/profile" class="block px-4 py-2 text-sm text-gray-700 transform transition duration-300 hover:scale-105 hover:text-yellow-400" role="menuitem" tabindex="-1"
-                  id="user-menu-item-0">Your Profile</a>
-                <a href="/dashboard" class="block px-4 py-2 text-sm text-gray-700 transform transition duration-300 hover:scale-105 hover:text-yellow-400" role="menuitem" tabindex="-1"
-                  id="user-menu-item-1">Dashboard</a>
-                <form method="POST" action="/logout">
-                  @csrf
-                  <button type="submit" class="block px-4 py-2 text-sm text-gray-700 cursor-pointer  transform transition duration-300 hover:scale-105 hover:text-yellow-400" role="menuitem"
-                    tabindex="-1" id="user-menu-item-2">Log out</button>
-                </form>
+
+                <div class="px-4 py-3 border-b border-slate-700/50 mb-1">
+                  <p class="text-xs text-slate-400">Signed in as</p>
+                  <p class="text-sm font-semibold text-white truncate">{{ Auth::user()->username }}</p>
+                </div>
+
+                <a href="/profile"
+                  class="group flex items-center px-4 py-2 text-sm text-slate-300 hover:bg-indigo-500/10 hover:text-indigo-400 transition-colors"
+                  role="menuitem">
+                  <svg class="mr-3 h-4 w-4 text-slate-400 group-hover:text-indigo-400" fill="none"
+                    stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                  </svg>
+                  Your Profile
+                </a>
+                <a href="/dashboard"
+                  class="group flex items-center px-4 py-2 text-sm text-slate-300 hover:bg-indigo-500/10 hover:text-indigo-400 transition-colors"
+                  role="menuitem">
+                  <svg class="mr-3 h-4 w-4 text-slate-400 group-hover:text-indigo-400" fill="none"
+                    stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z">
+                    </path>
+                  </svg>
+                  Dashboard
+                </a>
+
+                <div class="border-t border-slate-700/50 mt-1 pt-1">
+                  <form method="POST" action="/logout">
+                    @csrf
+                    <button type="submit"
+                      class="group flex w-full items-center px-4 py-2 text-sm text-slate-300 hover:bg-red-500/10 hover:text-red-400 transition-colors"
+                      role="menuitem">
+                      <svg class="mr-3 h-4 w-4 text-slate-400 group-hover:text-red-400" fill="none"
+                        stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
+                        </path>
+                      </svg>
+                      Log out
+                    </button>
+                  </form>
+                </div>
               </div>
 
             </div>
           @else
-            <a class="text-white text-xs font-medium hover:scale-105 transition"
-              Style="font-family: 'Press Start 2P', sans-serif;" href="/login">Login</a>
-            <span class="text-white text-sm mx-3">|</span>
-            <a class="text-xs font-medium bg-yellow-400 border-2 border-black text-gray-900 px-4 py-2 rounded-md shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:bg-violet-400 hover:scale-105 transition"
-              Style="font-family: 'Press Start 2P', sans-serif;" href="/register">Register</a>
+            <div class="flex items-center gap-4">
+              <a href="/login" class="text-sm font-medium text-slate-300 hover:text-white transition-colors">Login</a>
+              <a href="/register"
+                class="rounded-full bg-indigo-600 px-5 py-2 text-sm font-medium text-white shadow-lg shadow-indigo-500/20 hover:bg-indigo-500 hover:shadow-indigo-500/40 hover:-translate-y-0.5 transition-all duration-300">
+                Register
+              </a>
+            </div>
           @endif
         </div>
       </div>
 
       <div class="-mr-2 flex md:hidden">
-        <!-- Mobile menu button -->
         <button type="button" @click="buka= !buka"
-          class="relative inline-flex items-center justify-center rounded-md bg-gray-800 p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden"
+          class="inline-flex items-center justify-center rounded-md p-2 text-slate-400 hover:bg-slate-800 hover:text-white focus:outline-none ring-1 ring-transparent focus:ring-slate-700 transition-colors"
           aria-controls="mobile-menu" aria-expanded="false">
-          <span class="absolute -inset-0.5"></span>
           <span class="sr-only">Open main menu</span>
-
-          <!-- Menu open: "hidden", Menu closed: "block" -->
           <svg :class="{ 'hidden': buka, 'block': !buka }" class="size-6" fill="none" viewBox="0 0 24 24"
-            stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
+            stroke-width="1.5" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
           </svg>
-
-          <!-- Menu open: "block", Menu closed: "hidden" -->
           <svg :class="{ 'block': buka, 'hidden': !buka }" class="hidden size-6" fill="none" viewBox="0 0 24 24"
-            stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
+            stroke-width="1.5" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
           </svg>
         </button>
@@ -98,49 +154,56 @@
     </div>
   </div>
 
-  <!-- Mobile menu, show/hide based on menu state. -->
-  <div x-show="buka" class="md:hidden" id="mobile-menu">
-    <div class="space-y-1 px-2 pt-2 pb-3 sm:px-3">
-      <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-      <x-my-nav-link class="block" href="/" :current="request()->is('/')">Home</x-my-nav-link>
-      <x-my-nav-link class="block" href="/posts" :current="request()->is('posts')">Blog</x-my-nav-link>
-      <x-my-nav-link class="block" href="/about" :current="request()->is('about')">About</x-my-nav-link>
-      <x-my-nav-link class="block" href="/contact" :current="request()->is('contact')">Contact Us</x-my-nav-link>
+  <div x-show="buka" x-collapse class="md:hidden bg-slate-900/95 backdrop-blur-xl border-b border-slate-700"
+    id="mobile-menu">
+    <div class="space-y-1 px-4 py-4">
+      <x-my-nav-link
+        class="block px-3 py-2 rounded-md text-base font-medium transition-colors {{ request()->is('/') ? 'bg-indigo-600 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}"
+        href="/" :current="request()->is('/')">Home</x-my-nav-link>
+      <x-my-nav-link
+        class="block px-3 py-2 rounded-md text-base font-medium transition-colors {{ request()->is('posts') ? 'bg-indigo-600 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}"
+        href="/posts" :current="request()->is('posts')">Blog</x-my-nav-link>
+      <x-my-nav-link
+        class="block px-3 py-2 rounded-md text-base font-medium transition-colors {{ request()->is('about') ? 'bg-indigo-600 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}"
+        href="/about" :current="request()->is('about')">About</x-my-nav-link>
+      <x-my-nav-link
+        class="block px-3 py-2 rounded-md text-base font-medium transition-colors {{ request()->is('contact') ? 'bg-indigo-600 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}"
+        href="/contact" :current="request()->is('contact')">Contact Us</x-my-nav-link>
     </div>
-    <div class="border-t border-gray-700 pt-4 pb-3">
+
+    <div class="border-t border-slate-700 pt-4 pb-6">
       @if (Auth::check())
-        <div class="flex items-center px-5">
+        <div class="flex items-center px-5 mb-4">
           <div class="shrink-0">
-            <img class="size-10 rounded-full object-cover border-2 border-violet-400"
+            <img class="size-10 rounded-full object-cover ring-2 ring-slate-600"
               src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : asset('img/default-avatar.jpg') }}"
               alt="{{ Auth::user()->name }}" />
           </div>
           <div class="ml-3">
-            <div class="text-base/5 font-medium text-gray-200">{{ Auth::user()->name }}</div>
-            <div class="text-base/5 font-medium text-gray-400">{{ Auth::user()->email }}</div>
+            <div class="text-base font-medium text-white">{{ Auth::user()->name }}</div>
+            <div class="text-sm font-medium text-slate-400">{{ Auth::user()->email }}</div>
           </div>
         </div>
 
-        <div class="mt-3 space-y-1 px-2 text-sm">
+        <div class="space-y-1 px-4">
           <a href="/profile"
-            class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">Your
+            class="block rounded-md px-3 py-2 text-base font-medium text-slate-300 hover:bg-slate-800 hover:text-indigo-400 transition-colors">Your
             Profile</a>
           <a href="/dashboard"
-            class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">Manage
-            your posts</a>
+            class="block rounded-md px-3 py-2 text-base font-medium text-slate-300 hover:bg-slate-800 hover:text-indigo-400 transition-colors">Dashboard</a>
           <form method="POST" action="/logout">
             @csrf
             <button type="submit"
-              class="block w-full text-start rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white cursor-pointer"
-              role="menuitem" tabindex="-1" id="user-menu-item-2">Log out</button>
+              class="block w-full text-left rounded-md px-3 py-2 text-base font-medium text-slate-300 hover:bg-red-900/20 hover:text-red-400 transition-colors">Log
+              out</button>
           </form>
         </div>
       @else
-        <div class="my-2 space-y-1 px-4">
-          <a class="block rounded-md px-3 py-1 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
-            href="/login">Login</a>
-          <a class="block rounded-md px-3 py-1 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
-            href="/register">Register</a>
+        <div class="px-4 space-y-3">
+          <a href="/login"
+            class="block w-full text-center rounded-md px-3 py-2 text-base font-medium text-slate-300 hover:bg-slate-800 hover:text-white border border-slate-600">Login</a>
+          <a href="/register"
+            class="block w-full text-center rounded-md px-3 py-2 text-base font-medium text-white bg-indigo-600 hover:bg-indigo-500 shadow-lg shadow-indigo-500/20">Register</a>
         </div>
       @endif
     </div>

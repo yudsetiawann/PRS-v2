@@ -9,12 +9,12 @@ use App\Http\Controllers\ProfileController;
 
 Route::get('/', function () {
     return view('home', ['title' => 'Home Page']);
-});
+})->name('home');
 
 Route::get('/posts', function () {
     $categoryName = null;
     if (request('category')) {
-        $cat = \App\Models\Category::where('slug', request('category'))->first();
+        $cat = Category::where('slug', request('category'))->first();
         $categoryName = $cat ? $cat->name : null;
     }
     $title = $categoryName ? 'Category: ' . $categoryName : 'All Categories';

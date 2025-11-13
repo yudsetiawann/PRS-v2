@@ -16,8 +16,9 @@
 
   <!-- Scripts -->
   @vite(['resources/css/app.css', 'resources/js/app.js'])
+  <style>[x-cloak] { display: none !important; }</style>
 
-  <style type="text/css">
+  {{-- <style type="text/css">
     * {
       cursor: url(https://ani.cursors-4u.net/cursors/cur-13/cur1156.ani),
         url(https://ani.cursors-4u.net/cursors/cur-13/cur1156.png),
@@ -33,7 +34,7 @@
         url(https://cur.cursors-4u.net/cursors/cur-3/cur291.png),
         pointer !important;
     }
-  </style>
+  </style> --}}
   @stack('style')
 </head>
 
@@ -57,6 +58,7 @@
   </div>
   <x-footer />
   <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
   @stack('script')
 </body>
 
