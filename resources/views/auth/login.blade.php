@@ -51,15 +51,15 @@
       <x-input-error :messages="$errors->get('password')" class="mt-2" />
     </div>
 
-    <div class="block">
+    {{-- <div class="block">
       <label for="remember_me" class="inline-flex items-center cursor-pointer">
         <input id="remember_me" type="checkbox"
           class="rounded border-slate-600 bg-slate-900 text-indigo-600 shadow-sm focus:ring-indigo-500 focus:ring-offset-slate-800"
           name="remember">
-        {{-- <span
-          class="ms-2 text-sm text-slate-400 group-hover:text-white transition-colors">{{ __('Remember me') }}</span> --}}
+        <span
+          class="ms-2 text-sm text-slate-400 group-hover:text-white transition-colors">{{ __('Remember me') }}</span>
       </label>
-    </div>
+    </div> --}}
 
     <button type="submit"
       class="w-full text-white bg-indigo-600 hover:bg-indigo-700 focus:ring-4 focus:outline-none focus:ring-indigo-500/50 font-medium rounded-lg text-sm px-5 py-3 text-center shadow-lg shadow-indigo-500/30 transition-all transform hover:-translate-y-0.5">
