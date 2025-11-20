@@ -69,7 +69,8 @@
                 </button>
               </div>
 
-              <div x-show="open" x-cloak x-transition:enter="transition ease-out duration-200 transform"
+              <div x-show="open" x-cloak style="display: none;"
+                x-transition:enter="transition ease-out duration-200 transform"
                 x-transition:enter-start="opacity-0 scale-95 -translate-y-2"
                 x-transition:enter-end="opacity-100 scale-100 translate-y-0"
                 x-transition:leave="transition ease-in duration-150 transform"
@@ -154,7 +155,8 @@
     </div>
   </div>
 
-  <div x-show="buka" x-cloak x-collapse class="md:hidden bg-slate-900/95 backdrop-blur-xl border-b border-slate-700" id="mobile-menu">
+  <div x-show="buka" x-cloak style="display: none;" x-collapse
+    class="md:hidden bg-slate-900/95 backdrop-blur-xl border-b border-slate-700" id="mobile-menu">
     <div class="space-y-1 px-4 py-4">
       <x-my-nav-link
         class="block px-3 py-2 rounded-md text-base font-medium transition-colors {{ request()->is('/') ? 'bg-indigo-600 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}"

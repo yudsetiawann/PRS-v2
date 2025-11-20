@@ -16,7 +16,11 @@
 
   <!-- Scripts -->
   @vite(['resources/css/app.css', 'resources/js/app.js'])
-  <style>[x-cloak] { display: none !important; }</style>
+  <style>
+    [x-cloak] {
+      display: none !important;
+    }
+  </style>
 
   {{-- <style type="text/css">
     * {
@@ -58,6 +62,7 @@
   </div>
   <x-footer />
   <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
   @stack('script')
 </body>
