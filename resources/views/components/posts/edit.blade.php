@@ -1,7 +1,7 @@
 @push('style')
   <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet" />
   <style>
-    /* Kustomisasi Quill Editor untuk Dark Mode (Sama dengan Create) */
+    /* Kustomisasi Quill Editor untuk Dark Mode */
     .ql-toolbar.ql-snow {
       background-color: #1e293b;
       /* Slate-800 */
@@ -24,6 +24,7 @@
       font-size: 1rem;
     }
 
+    /* Styling Icons */
     .ql-snow .ql-stroke {
       stroke: #94a3b8 !important;
     }
@@ -45,9 +46,9 @@
       stroke: #fff !important;
     }
 
-    .ql-editor.ql-blank::before {
-      color: #64748b;
-      font-style: normal;
+    /* Mencegah layout shift */
+    #editor {
+      min-height: 300px;
     }
   </style>
 @endpush
@@ -71,14 +72,7 @@
           class="block w-full rounded-xl border border-slate-600 bg-slate-900 p-3 text-white placeholder-slate-500 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm transition-colors @error('title') border-red-500 focus:border-red-500 focus:ring-red-500 @enderror"
           placeholder="Ketik judul artikel..." autocomplete="off" value="{{ old('title', $post->title) }}">
         @error('title')
-          <p class="mt-2 text-xs text-red-400 flex items-center gap-1">
-            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd"
-                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                clip-rule="evenodd"></path>
-            </svg>
-            {{ $message }}
-          </p>
+          <p class="mt-2 text-xs text-red-400">{{ $message }}</p>
         @enderror
       </div>
 
@@ -108,12 +102,10 @@
       <div>
         <label for="body" class="block mb-2 text-sm font-medium text-slate-300">Konten</label>
 
-        <textarea id="body" name="body" class="hidden">{{ old('body', $post->body) }}</textarea>
+        <textarea id="body" name="body" class="hidden">{!! old('body', $post->body) !!}</textarea>
 
         <div class="relative">
-          <div id="editor" class="min-h-[300px] @error('body') border border-red-500 rounded-b-xl @enderror">
-            {!! old('body', $post->body) !!}
-          </div>
+          <div id="editor" class="min-h-[300px] @error('body') border border-red-500 rounded-b-xl @enderror"></div>
         </div>
 
         @error('body')
@@ -124,11 +116,6 @@
       <div class="flex items-center gap-4 pt-4 border-t border-slate-700/50">
         <button type="submit"
           class="inline-flex items-center justify-center rounded-xl bg-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition-all hover:bg-indigo-700 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-slate-800">
-          <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
-            </path>
-          </svg>
           Update Post
         </button>
 
@@ -145,39 +132,62 @@
 @push('script')
   <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
   <script>
-    // Initialize Quill
-    const quill = new Quill('#editor', {
-      theme: 'snow',
-      placeholder: 'Tulis konten di sini...',
-      modules: {
-        toolbar: [
-          [{
-            'header': [1, 2, 3, false]
-          }],
-          ['bold', 'italic', 'underline', 'strike'],
-          ['blockquote', 'code-block'],
-          [{
-            'list': 'ordered'
-          }, {
-            'list': 'bullet'
-          }],
-          [{
-            'color': []
-          }, {
-            'background': []
-          }],
-          ['link', 'clean']
-        ]
+    // PERBAIKAN 2: Bungkus inisialisasi dalam fungsi
+    function initQuill() {
+      // Cek apakah editor sudah ada (mencegah double init)
+      if (document.querySelector('.ql-toolbar')) {
+        return;
       }
-    });
 
-    const postForm = document.querySelector('#post-form');
-    const postBody = document.querySelector('#body');
+      const editorElement = document.querySelector('#editor');
+      if (!editorElement) return; // Stop jika element tidak ada di halaman ini
 
-    postForm.addEventListener('submit', function(e) {
-      // Ambil konten dari Quill
-      const content = quill.root.innerHTML;
-      postBody.value = content;
-    });
+      const postBody = document.querySelector('#body');
+
+      // Initialize Quill
+      const quill = new Quill('#editor', {
+        theme: 'snow',
+        placeholder: 'Tulis konten di sini...',
+        modules: {
+          toolbar: [
+            [{
+              'header': [1, 2, 3, false]
+            }],
+            ['bold', 'italic', 'underline', 'strike'],
+            ['blockquote', 'code-block'],
+            [{
+              'list': 'ordered'
+            }, {
+              'list': 'bullet'
+            }],
+            [{
+              'color': []
+            }, {
+              'background': []
+            }],
+            ['link', 'clean']
+          ]
+        }
+      });
+
+      // PERBAIKAN 3: Load data dari Textarea ke Quill SETELAH init selesai
+      // Ini mencegah user melihat HTML mentah
+      if (postBody.value) {
+        quill.root.innerHTML = postBody.value;
+      }
+
+      // Sync data saat submit form
+      const postForm = document.querySelector('#post-form');
+      postForm.addEventListener('submit', function(e) {
+        postBody.value = quill.root.innerHTML;
+      });
+    }
+
+    // Jalankan saat halaman pertama kali dimuat
+    document.addEventListener('DOMContentLoaded', initQuill);
+
+    // Jalankan juga saat navigasi Turbo/Livewire (jika ada)
+    document.addEventListener('turbo:load', initQuill); // Untuk Laravel Turbo
+    document.addEventListener('livewire:navigated', initQuill); // Untuk Livewire 3
   </script>
 @endpush

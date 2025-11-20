@@ -1,177 +1,259 @@
 <x-layout :title="$title">
-  {{-- Our Story --}}
-  <section class="pt-20 bg-gray-500">
-    <div class="flex flex-col lg:flex-row md:flex-row py-8 px-4 mx-auto max-w-screen-xl lg:py-8">
-      <div class="relative -top-10 md:my-auto">
-        <img src="{{ asset('img/people-pixel.png') }}" alt="pixel-people" class="w-180 object-contain">
-      </div>
-      <div class="mx-auto md:ml-8 mt-10 w-full text-center md:text-left lg:text-left mb-8 lg:mb-16">
-        <h2 class="mb-3 text-3xl font-bold text-white lg:text-5xl" style="font-family: 'Press Start 2P', monospace;">Our
-          Story</h2>
-        <p class="text-start text-gray-200 sm:text-sm" style="font-family:'Fira Mono', monospace;">Pixel
-          Rhythm Society lahir dari satu visi sederhana: tumbuh bareng dan saling kasih dampak positif. Awalnya, kita
-          cuma sekumpulan teman yang suka nongkrong di Discord, ngobrol tugas kampus, curhat, belajar bareng, sampai
-          chill dengerin musik atau main game. Lama-lama kepikiran, “Kenapa nggak bikin space sendiri aja?” Akhirnya
-          lahirlah server Discord PRS, jadi rumah buat siapa aja yang mau ngerjain tugas, diskusi, atau sekadar random
-          ngobrol.
+  <div class="bg-slate-900 min-h-screen relative overflow-hidden">
 
-          Buat kami, hidup itu bukan lomba siapa paling cepat, tapi tentang seberapa besar dampak baik yang bisa kita
-          kasih ke sekitar. PRS dibangun biar kita bisa terus growth bareng, saling support, dan siapa tahu manfaatnya
-          bisa makin luas. Dari Discord, ide makin berkembang—mulai dari website sederhana buat sharing & CRUD blog
-          post, sampai ke depannya pengen jadi learning platform yang open, kolaboratif, dan impactful buat lebih banyak
-          orang.</p>
-      </div>
+    <div
+      class="absolute top-0 left-0 w-full h-[500px] bg-indigo-600/10 rounded-full mix-blend-screen filter blur-[120px] opacity-30 pointer-events-none">
     </div>
-  </section>
-  {{-- End Our Story --}}
+    <div
+      class="absolute bottom-0 right-0 w-[800px] h-[800px] bg-cyan-600/5 rounded-full mix-blend-screen filter blur-[120px] opacity-20 pointer-events-none">
+    </div>
 
-  {{-- Our Skills --}}
-  <section class="bg-gray-800 dark:bg-gray-900">
-    <div class="max-w-7xl px-4 py-8 mx-auto lg:py-16 lg:px-6">
-      <div class="flex flex-col lg:flex-row items-center lg:items-start gap-12">
-        <!-- SKILLS -->
-        <div class="w-full lg:w-1/2">
-          <h3 class="text-2xl text-center lg:text-start font-bold text-gray-100 mb-6 font-pixel tracking-wide">Our
-            Members Skills</h3>
-          <div class="mb-4">
-            <div class="flex justify-between mb-1">
-              <span class="text-base font-medium text-blue-400">Frontend Developer</span>
-              <span class="text-sm font-medium text-blue-400">40%</span>
+    <section class="relative pt-24 pb-20 lg:pt-32 lg:pb-24">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid lg:grid-cols-2 gap-16 items-center">
+
+          <div class="relative order-2 lg:order-1">
+            <div
+              class="absolute inset-0 bg-gradient-to-tr from-indigo-500 to-cyan-500 rounded-3xl transform rotate-3 opacity-20 blur-lg">
             </div>
-            <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-              <div class="bg-blue-600 h-2.5 rounded-full" style="width: 40%"></div>
+            <div class="relative rounded-3xl overflow-hidden border border-slate-700/50 shadow-2xl">
+              <img src="{{ asset('img/people-pixel.png') }}" alt="Community Vibe"
+                class="w-full h-full object-cover bg-slate-800/50 backdrop-blur">
             </div>
           </div>
 
-          <div class="mb-4">
-            <div class="flex justify-between mb-1">
-              <span class="text-base font-medium text-green-400">UI/UX</span>
-              <span class="text-sm font-medium text-green-400">20%</span>
-            </div>
-            <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-              <div class="bg-green-500 h-2.5 rounded-full" style="width: 20%"></div>
+          <div class="order-1 lg:order-2">
+            <h2 class="text-lg font-semibold text-indigo-400 mb-2 tracking-wide uppercase">Tentang Kami</h2>
+            <h1 class="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
+              Tumbuh Bersama,<br>
+              <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">Berdampak
+                Positif.</span>
+            </h1>
+
+            <div class="space-y-6 text-slate-300 text-lg leading-relaxed">
+              <p>
+                Pixel Rhythm Society lahir dari visi sederhana. Awalnya, kami hanya sekumpulan teman di Discord yang
+                suka nongkrong, bahas tugas, hingga main game. Namun, kami sadar: <span
+                  class="text-white font-medium">"Kenapa nggak bikin space yang lebih serius?"</span>
+              </p>
+              <p>
+                Buat kami, hidup bukan perlombaan siapa paling cepat, tapi seberapa besar dampak yang bisa kita beri.
+                PRS adalah rumah untuk belajar, kolaborasi, dan berkarya. Dari sekadar grup chat, kini kami berkembang
+                menjadi platform untuk berbagi wawasan teknologi.
+              </p>
             </div>
           </div>
 
-          <div class="mb-4">
-            <div class="flex justify-between mb-1">
-              <span class="text-base font-medium text-yellow-400">Backend Developer</span>
-              <span class="text-sm font-medium text-yellow-400">30%</span>
-            </div>
-            <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-              <div class="bg-yellow-500 h-2.5 rounded-full" style="width: 30%"></div>
-            </div>
-          </div>
-
-          <div class="mb-4">
-            <div class="flex justify-between mb-1">
-              <span class="text-base font-medium text-slate-400">Networking</span>
-              <span class="text-sm font-medium text-slate-400">10%</span>
-            </div>
-            <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-              <div class="bg-slate-500 h-2.5 rounded-full" style="width: 10%"></div>
-            </div>
-          </div>
-          <!-- Tambahkan skill bar lain di sini -->
-        </div>
-        <!-- STATISTICS KANAN -->
-        <div class="w-full lg:w-1/2 my-auto flex flex-col items-center">
-          <dl class="grid grid-cols-2 gap-8 w-full mb-8">
-            <div class="flex flex-col items-center justify-center">
-              <dt class="mb-2 text-3xl md:text-4xl font-extrabold text-gray-200">50+</dt>
-              <dd class="font-light text-gray-400 dark:text-gray-400">members</dd>
-            </div>
-            <div class="flex flex-col items-center justify-center">
-              <dt class="mb-2 text-3xl md:text-4xl font-extrabold text-gray-200">30+</dt>
-              <dd class="font-light text-gray-400 dark:text-gray-400">articles</dd>
-            </div>
-            <div class="flex flex-col items-center justify-center col-span-2">
-              <dt class="mb-2 text-3xl md:text-4xl font-extrabold text-gray-200">4+</dt>
-              <dd class="font-light text-gray-400 dark:text-gray-400">mentors</dd>
-            </div>
-          </dl>
         </div>
       </div>
-    </div>
-  </section>
-  {{-- End Our Skills --}}
+    </section>
 
-  {{-- Our Team --}}
-  <section class="dark:bg-gray-600">
-    <div class="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6 ">
-      <div class="mx-auto max-w-screen-sm text-center mb-8 lg:mb-16">
-        <h2 class="mb-3 text-3xl lg:text-5xl font-bold text-white" style="font-family: 'Press Start 2P', monospace;">Our
-          Team</h2>
-        <p class="text-gray-200 lg:mb-16 sm:text-sm dark:text-gray-400 text-shadow-lg"
-          style="font-family: 'Fira Mono', monospace;">Our team is just a group
-          of
-          friends who love to grow together. Kami ngoding, sharing, diskusi, dan saling support supaya PRS jadi tempat
-          yang nyaman dan bermanfaat buat siapa pun yang gabung.</p>
-      </div>
+    <section class="py-20 bg-slate-800/30 border-y border-slate-800/50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col lg:flex-row gap-16">
 
-      {{-- INI BAGIAN YANG BERUBAH --}}
-      <div class="grid gap-8 mb-6 lg:mb-16 md:grid-cols-2">
-        {{-- Profile 1 --}}
-        <x-team name="Muhammad Yudi Setiawan" role="Founder PRS" job="Web Development"
-          desc="Fullstack Developer spesialis Laravel, handle semua dari frontend, backend, API sampai deployment. Aktif eksplor Tailwind, Livewire, dan DevOps tools biar workflow makin efisien."
-          image="{{ asset('img/nagi.jpg') }}" :links="[
-              'facebook' => 'https://facebook.com/yudsetiawann',
-              'instagram' => 'https://instagram.com/yset___/',
-              'github' => 'https://github.com/yudsetiawann/',
-          ]" />
+          <div class="w-full lg:w-1/2">
+            <h3 class="text-2xl font-bold text-white mb-8">Komposisi Keahlian</h3>
+            <div class="space-y-6">
 
-        {{-- Profile 2 --}}
-        <x-team name="Fredy Fajar Adi Putra" role="Backend Developer" job="Web Development"
-          desc="Backend Engineer yang terbiasa pakai CodeIgniter, Laravel, dan Node.js. Fokus di pembuatan API, optimasi database, dan integrasi sistem."
-          image="{{ asset('img/gojo.jpg') }}" :links="[
-              'facebook' => 'https://facebook.com/fredyy.fajarr',
-              'instagram' => 'https://instagram.com/fredyyfajarr_/',
-              'github' => 'https://github.com/',
-          ]" />
+              <div>
+                <div class="flex justify-between mb-2">
+                  <span class="text-sm font-medium text-slate-300">Frontend Developer</span>
+                  <span class="text-sm font-medium text-indigo-400">40%</span>
+                </div>
+                <div class="w-full bg-slate-700 rounded-full h-2">
+                  <div class="bg-gradient-to-r from-indigo-500 to-cyan-500 h-2 rounded-full" style="width: 40%"></div>
+                </div>
+              </div>
 
-        <div class="max-w-xl mx-auto md:col-span-2">
-          {{-- Profile 3 --}}
-          <x-team name="Maulana Aulia Rahman" role="Frontend Developer" job="Web Development"
-            desc="Frontend Engineer dengan pengalaman di bidang pengembangan Software serta Keahlian lain seperti Cloud Computing dalam integrasi server yang efisien."
-            image="{{ asset('img/4.jpg') }}" :links="[
-                'facebook' => 'https://facebook.com/fadly.ramadhan.1865',
-                'instagram' => 'https://instagram.com/caidenrev/',
-                'github' => 'https://github.com/caidenrev/',
-            ]" />
+              <div>
+                <div class="flex justify-between mb-2">
+                  <span class="text-sm font-medium text-slate-300">Backend Developer</span>
+                  <span class="text-sm font-medium text-indigo-400">30%</span>
+                </div>
+                <div class="w-full bg-slate-700 rounded-full h-2">
+                  <div class="bg-gradient-to-r from-indigo-500 to-cyan-500 h-2 rounded-full" style="width: 30%"></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex justify-between mb-2">
+                  <span class="text-sm font-medium text-slate-300">UI/UX Design</span>
+                  <span class="text-sm font-medium text-indigo-400">20%</span>
+                </div>
+                <div class="w-full bg-slate-700 rounded-full h-2">
+                  <div class="bg-gradient-to-r from-indigo-500 to-cyan-500 h-2 rounded-full" style="width: 20%"></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex justify-between mb-2">
+                  <span class="text-sm font-medium text-slate-300">Networking & DevOps</span>
+                  <span class="text-sm font-medium text-indigo-400">10%</span>
+                </div>
+                <div class="w-full bg-slate-700 rounded-full h-2">
+                  <div class="bg-gradient-to-r from-indigo-500 to-cyan-500 h-2 rounded-full" style="width: 10%"></div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="w-full lg:w-1/2 grid grid-cols-2 gap-6">
+            <div
+              class="bg-slate-800 p-6 rounded-2xl border border-slate-700 hover:border-indigo-500/50 transition-colors text-center">
+              <dt class="text-4xl font-extrabold text-white mb-1">50+</dt>
+              <dd class="text-sm text-slate-400 uppercase tracking-wider">Members</dd>
+            </div>
+            <div
+              class="bg-slate-800 p-6 rounded-2xl border border-slate-700 hover:border-indigo-500/50 transition-colors text-center">
+              <dt class="text-4xl font-extrabold text-white mb-1">30+</dt>
+              <dd class="text-sm text-slate-400 uppercase tracking-wider">Articles</dd>
+            </div>
+            <div
+              class="col-span-2 bg-slate-800 p-6 rounded-2xl border border-slate-700 hover:border-indigo-500/50 transition-colors text-center">
+              <dt class="text-4xl font-extrabold text-white mb-1">4+</dt>
+              <dd class="text-sm text-slate-400 uppercase tracking-wider">Core Mentors</dd>
+            </div>
+          </div>
+
         </div>
       </div>
-    </div>
-  </section>
-  {{-- End Our Team --}}
+    </section>
 
-  {{-- Tech Stack --}}
-  <section class="bg-[#222b39] py-16">
-    <div class="max-w-6xl mx-auto px-4">
-      <h2 class="text-3xl md:text-5xl font-bold text-center mb-4 text-white"
-        style="font-family: 'Press Start 2P', monospace;">Tech Stack</h2>
-      <p class="text-center text-gray-300 mb-12" style="font-family: 'Fira Mono', monospace;">
-        Dijalankan dengan teknologi modern agar performa maksimal dan pengalaman coding yang fun!
-      </p>
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-        <!-- Laravel -->
-        <x-tech-stack image="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/laravel/laravel-original.svg"
-          stack="Laravel" descStack="Framework PHP andalan buat backend modern & API." />
-        <!-- Tailwind CSS -->
-        <x-tech-stack image="https://devicon-website.vercel.app/api/tailwindcss/plain.svg" stack="Tailwind CSS"
-          descStack="Bikin UI pixel-style sat-set, responsive, langsung di HTML." />
-        <!-- SQLite -->
-        <x-tech-stack image="https://devicon-website.vercel.app/api/sqlite/original.svg" stack="SQLite"
-          descStack="Database ringan, simple, cocok buat project skala kecil sampai menengah." />
-        <!-- GitHub -->
-        {{-- <x-tech-stack image="{{ asset('img/github.svg') }}" stack="Github" descStack="Version control dan kolaborasi bareng tim."
-        /> --}}
-        <!-- CPanel -->
-        <x-tech-stack image="{{ asset('img/cpanel.svg') }}" stack="CPanel"
-          descStack="Deploy & manage project dengan mudah di shared hosting." />
+    <section class="py-20 lg:py-28 relative">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+          <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Meet the Team</h2>
+          <p class="text-slate-400 text-lg">
+            Sekumpulan teman yang hobi ngoding dan berbagi. Kami membangun PRS agar menjadi tempat yang nyaman untuk
+            berkembang.
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+          <div
+            class="group relative bg-slate-800/50 rounded-2xl overflow-hidden border border-slate-700 hover:border-indigo-500 transition-all duration-300 hover:-translate-y-2">
+            <div class="h-32 bg-gradient-to-r from-indigo-600 to-blue-600"></div>
+            <div class="px-6 pb-6">
+              <div class="relative -mt-16 mb-4 text-center">
+                <img src="{{ asset('img/nagi.jpg') }}" alt="Member"
+                  class="w-32 h-32 rounded-full border-4 border-slate-800 object-cover mx-auto shadow-lg">
+              </div>
+              <div class="text-center mb-6">
+                <h3 class="text-xl font-bold text-white">Muhammad Yudi S.</h3>
+                <p class="text-indigo-400 font-medium text-sm">Founder & Fullstack</p>
+              </div>
+              <p class="text-slate-400 text-sm text-center mb-6 leading-relaxed">
+                Spesialis Laravel, handle frontend hingga deployment. Aktif eksplor Tailwind, Livewire, dan DevOps.
+              </p>
+              <div class="flex justify-center gap-4 pt-4 border-t border-slate-700/50">
+                <a href="https://github.com/yudsetiawann/"
+                  class="text-slate-400 hover:text-white transition-colors"><span class="text-xs">Github</span></a>
+                <a href="https://instagram.com/yudstwan_/"
+                  class="text-slate-400 hover:text-pink-400 transition-colors"><span class="text-xs">IG</span></a>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="group relative bg-slate-800/50 rounded-2xl overflow-hidden border border-slate-700 hover:border-indigo-500 transition-all duration-300 hover:-translate-y-2">
+            <div class="h-32 bg-gradient-to-r from-purple-600 to-indigo-600"></div>
+            <div class="px-6 pb-6">
+              <div class="relative -mt-16 mb-4 text-center">
+                <img src="{{ asset('img/gojo.jpg') }}" alt="Member"
+                  class="w-32 h-32 rounded-full border-4 border-slate-800 object-cover mx-auto shadow-lg">
+              </div>
+              <div class="text-center mb-6">
+                <h3 class="text-xl font-bold text-white">Fredy Fajar A.P.</h3>
+                <p class="text-indigo-400 font-medium text-sm">Backend Developer</p>
+              </div>
+              <p class="text-slate-400 text-sm text-center mb-6 leading-relaxed">
+                Backend Engineer (CodeIgniter, Laravel, Node.js). Fokus di API, optimasi database, dan integrasi sistem.
+              </p>
+              <div class="flex justify-center gap-4 pt-4 border-t border-slate-700/50">
+                <a href="https://github.com/fredyyfajarr/"
+                  class="text-slate-400 hover:text-white transition-colors"><span class="text-xs">Github</span></a>
+                <a href="https://instagram.com/fredyyfajarr_/"
+                  class="text-slate-400 hover:text-pink-400 transition-colors"><span class="text-xs">IG</span></a>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="group relative bg-slate-800/50 rounded-2xl overflow-hidden border border-slate-700 hover:border-indigo-500 transition-all duration-300 hover:-translate-y-2 lg:col-span-1 md:col-span-2 md:max-w-md md:mx-auto lg:max-w-none">
+            <div class="h-32 bg-gradient-to-r from-cyan-600 to-blue-600"></div>
+            <div class="px-6 pb-6">
+              <div class="relative -mt-16 mb-4 text-center">
+                <img src="{{ asset('img/4.jpg') }}" alt="Member"
+                  class="w-32 h-32 rounded-full border-4 border-slate-800 object-cover mx-auto shadow-lg">
+              </div>
+              <div class="text-center mb-6">
+                <h3 class="text-xl font-bold text-white">Maulana Aulia R.</h3>
+                <p class="text-indigo-400 font-medium text-sm">Frontend Developer</p>
+              </div>
+              <p class="text-slate-400 text-sm text-center mb-6 leading-relaxed">
+                Frontend Engineer dengan keahlian software development serta Cloud Computing dan integrasi server.
+              </p>
+              <div class="flex justify-center gap-4 pt-4 border-t border-slate-700/50">
+                <a href="https://github.com/Astheric/" class="text-slate-400 hover:text-white transition-colors"><span
+                    class="text-xs">Github</span></a>
+                <a href="https://www.instagram.com/rhmn_maulana/"
+                  class="text-slate-400 hover:text-pink-400 transition-colors"><span class="text-xs">IG</span></a>
+              </div>
+            </div>
+          </div>
+
+        </div>
       </div>
-    </div>
-  </section>
-  {{-- End Tech Stack --}}
+    </section>
 
+    <section class="py-20 bg-slate-900 border-t border-slate-800 relative">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold text-white mb-3">Tech Stack</h2>
+          <p class="text-slate-400">Teknologi modern untuk performa maksimal dan pengalaman coding yang menyenangkan.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+
+          <div
+            class="p-6 bg-slate-800/40 border border-slate-700 rounded-xl flex flex-col items-center text-center hover:bg-slate-800 transition-colors">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/laravel/laravel-original.svg" alt="Laravel"
+              class="w-12 h-12 mb-4">
+            <h4 class="text-white font-bold mb-1">Laravel</h4>
+            <p class="text-xs text-slate-500">Modern PHP Framework</p>
+          </div>
+
+          <div
+            class="p-6 bg-slate-800/40 border border-slate-700 rounded-xl flex flex-col items-center text-center hover:bg-slate-800 transition-colors">
+            <img src="https://devicon-website.vercel.app/api/tailwindcss/plain.svg" alt="Tailwind"
+              class="w-12 h-12 mb-4">
+            <h4 class="text-white font-bold mb-1">Tailwind CSS</h4>
+            <p class="text-xs text-slate-500">Utility-First CSS</p>
+          </div>
+
+          <div
+            class="p-6 bg-slate-800/40 border border-slate-700 rounded-xl flex flex-col items-center text-center hover:bg-slate-800 transition-colors">
+            <img src="https://devicon-website.vercel.app/api/sqlite/original.svg" alt="SQLite"
+              class="w-12 h-12 mb-4">
+            <h4 class="text-white font-bold mb-1">SQLite</h4>
+            <p class="text-xs text-slate-500">Lightweight Database</p>
+          </div>
+
+          <div
+            class="p-6 bg-slate-800/40 border border-slate-700 rounded-xl flex flex-col items-center text-center hover:bg-slate-800 transition-colors">
+            <img src="{{ asset('img/cpanel.svg') }}" alt="cPanel" class="w-12 h-12 mb-4">
+            <h4 class="text-white font-bold mb-1">cPanel</h4>
+            <p class="text-xs text-slate-500">Deployment & Hosting</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </div>
   <x-footer />
 </x-layout>

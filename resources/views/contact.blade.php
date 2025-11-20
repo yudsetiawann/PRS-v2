@@ -1,5 +1,5 @@
 <x-layout :title="$title">
-  <section class="min-h-screen bg-slate-900 relative overflow-hidden py-12 lg:py-20">
+  <section class="min-h-screen bg-slate-900 relative overflow-hidden mt-14 py-12">
 
     <div
       class="absolute top-0 right-0 -translate-y-12 translate-x-12 w-96 h-96 bg-indigo-600/20 rounded-full mix-blend-screen filter blur-[100px] opacity-40 pointer-events-none">

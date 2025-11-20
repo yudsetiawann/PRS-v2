@@ -43,7 +43,7 @@
 </head>
 
 <body class="font-sans antialiased">
-  <div class="min-h-screen bg-gradient-to-br from-[#11182B] via-[#283559] to-[#7C3AED] overflow-hidden shadow-xs">
+  <div class="min-h-screen bg-slate-900 overflow-hidden shadow-xs">
     @include('layouts.navigation')
 
     <!-- Page Heading -->
