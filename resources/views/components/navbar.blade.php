@@ -154,8 +154,7 @@
     </div>
   </div>
 
-  <div x-show="buka" x-collapse class="md:hidden bg-slate-900/95 backdrop-blur-xl border-b border-slate-700"
-    id="mobile-menu">
+  <div x-show="buka" x-cloak x-collapse class="md:hidden bg-slate-900/95 backdrop-blur-xl border-b border-slate-700" id="mobile-menu">
     <div class="space-y-1 px-4 py-4">
       <x-my-nav-link
         class="block px-3 py-2 rounded-md text-base font-medium transition-colors {{ request()->is('/') ? 'bg-indigo-600 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}"
