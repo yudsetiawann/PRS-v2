@@ -130,7 +130,6 @@
     </div>
   </section>
 
-  <x-footer />
 </x-layout>
 
 <script>

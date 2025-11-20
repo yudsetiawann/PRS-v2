@@ -43,24 +43,24 @@
 </head>
 
 <body class="font-sans antialiased">
-  <div class="min-h-screen bg-slate-900 overflow-hidden shadow-xs">
+  <div class="min-h-screen bg-slate-900 overflow-hidden shadow-xs flex flex-col">
     @include('layouts.navigation')
 
-    <!-- Page Heading -->
     {{-- @isset($header)
-      <header class="bg-white shadow-sm">
-        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-          {{ $header }}
-        </div>
-      </header>
-    @endisset --}}
+        <header class="bg-white shadow-sm">
+          <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+            {{ $header }}
+          </div>
+        </header>
+      @endisset --}}
 
-    <!-- Page Content -->
-    <main>
+    <main class="flex-1">
       {{ $slot }}
     </main>
+
+    <x-footer />
   </div>
-  <x-footer />
+
   <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
