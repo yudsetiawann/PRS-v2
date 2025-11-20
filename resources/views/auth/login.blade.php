@@ -56,8 +56,8 @@
         <input id="remember_me" type="checkbox"
           class="rounded border-slate-600 bg-slate-900 text-indigo-600 shadow-sm focus:ring-indigo-500 focus:ring-offset-slate-800"
           name="remember">
-        <span
-          class="ms-2 text-sm text-slate-400 group-hover:text-white transition-colors">{{ __('Remember me') }}</span>
+        {{-- <span
+          class="ms-2 text-sm text-slate-400 group-hover:text-white transition-colors">{{ __('Remember me') }}</span> --}}
       </label>
     </div>
 
