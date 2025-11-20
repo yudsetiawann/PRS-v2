@@ -1,93 +1,111 @@
 @if (Session::has('success'))
-  <div class="flex justify-center">
-    <div id="toast-success"
-      class="z-1 absolute top-[6rem] flex items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg shadow-sm dark:text-gray-400 dark:bg-gray-800"
-      role="alert">
-      <div
-        class="inline-flex items-center justify-center shrink-0 w-8 h-8 text-green-500 bg-green-100 rounded-lg dark:bg-green-800 dark:text-green-200">
-        <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-          <path
-            d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
-        </svg>
-        <span class="sr-only">Check icon</span>
-      </div>
-      <div class="ms-3 text-sm font-normal">{{ Session::get('success') }}</div>
-      <button type="button"
-        class="ms-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8 dark:text-gray-500 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700"
-        data-dismiss-target="#toast-success" aria-label="Close">
-        <span class="sr-only">Close</span>
-        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-        </svg>
-      </button>
+  <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 5000)"
+    x-transition:enter="transform ease-out duration-300 transition"
+    x-transition:enter-start="translate-y-2 opacity-0 sm:translate-y-0 sm:translate-x-2"
+    x-transition:enter-end="translate-y-0 opacity-100 sm:translate-x-0"
+    x-transition:leave="transition ease-in duration-100" x-transition:leave-start="opacity-100"
+    x-transition:leave-end="opacity-0"
+    class="fixed top-24 right-5 z-50 flex items-center w-full max-w-xs p-4 mb-4 text-slate-300 bg-slate-800 rounded-xl shadow-2xl border border-slate-700 border-l-4 border-l-green-500"
+    role="alert">
+
+    <div class="inline-flex items-center justify-center shrink-0 w-8 h-8 text-green-400 bg-green-900/30 rounded-lg">
+      <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+        viewBox="0 0 20 20">
+        <path
+          d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+      </svg>
     </div>
+    <div class="ml-3 text-sm font-medium">{{ Session::get('success') }}</div>
+    <button type="button" @click="show = false"
+      class="ml-auto -mx-1.5 -my-1.5 bg-slate-800 text-slate-400 hover:text-white rounded-lg focus:ring-2 focus:ring-slate-600 p-1.5 hover:bg-slate-700 inline-flex items-center justify-center h-8 w-8">
+      <span class="sr-only">Close</span>
+      <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+      </svg>
+    </button>
   </div>
 @endif
 
-<section class="p-3 sm:p-5 antialiased">
-  <h2 class="text-xl font-semibold pl-4 mb-4 text-white" style="font-family: 'Press Start 2P', monospace;">Post by: {{ Auth::user()->name }}</h2>
-  <div class="max-w-screen-xl px-4">
-    <!-- Start coding here -->
-    <div class="bg-gray-900 rounded-md border-4  relative sm:rounded-lg overflow-hidden">
-      <div class="flex flex-col md:flex-row items-center space-y-3 md:space-y-0 md:space-x-4 p-4">
+<section class="p-4 sm:p-6 antialiased min-h-screen bg-slate-900">
+  <div class="mx-auto max-w-screen-xl px-4 lg:px-12">
+
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+      <div>
+        <h2 class="text-3xl font-bold text-white tracking-tight">Dashboard Posts</h2>
+        <p class="text-slate-400 text-sm mt-1">Manage postingan oleh: <span
+            class="text-indigo-400 font-semibold">{{ Auth::user()->name }}</span></p>
+      </div>
+
+      <a href="/dashboard/create" id="createProductModalButton1"
+        class="inline-flex items-center justify-center px-5 py-2.5 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-300/50 rounded-lg transition-all shadow-lg shadow-indigo-500/20 hover:-translate-y-0.5">
+        <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+        </svg>
+        Buat Post Baru
+      </a>
+    </div>
+
+    <div
+      class="bg-slate-800/50 backdrop-blur-sm relative shadow-xl sm:rounded-2xl border border-slate-700/60 overflow-hidden">
+
+      <div
+        class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-5 border-b border-slate-700/50">
         <div class="w-full md:w-1/2">
           <form class="flex items-center">
-            <label for="simple-search" class="sr-only">Search post</label>
+            <label for="simple-search" class="sr-only">Search</label>
             <div class="relative w-full">
               <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor"
-                  viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <svg aria-hidden="true" class="w-5 h-5 text-slate-400" fill="currentColor" viewbox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg">
                   <path fill-rule="evenodd"
                     d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
                     clip-rule="evenodd" />
                 </svg>
               </div>
               <input type="text" id="simple-search" name='keyword'
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                placeholder="Search post">
+                class="bg-slate-900 border border-slate-700 text-white text-sm rounded-xl focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 p-2.5 placeholder-slate-500 transition-colors"
+                placeholder="Cari judul post...">
             </div>
           </form>
         </div>
-        <div
-          class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
-          <a href="/dashboard/create" id="createProductModalButton1" data-modal-target="createProductModal1"
-            data-modal-toggle="createProductModal1"
-            class="flex items-center justify-center text-gray-800 bg-yellow-400 hover:bg-violet-300 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-4 py-2 shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:scale-105 transition">
-            <svg class="h-3.5 w-3.5 mr-2" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true">
-              <path clip-rule="evenodd" fill-rule="evenodd"
-                d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" />
-            </svg>
-            Add post
-          </a>
-        </div>
       </div>
+
       <div class="overflow-x-auto">
-        <table class="w-full text-sm text-left text-gray-200 dark:text-gray-400">
-          <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <table class="w-full text-sm text-left text-slate-400">
+          <thead class="text-xs text-slate-300 uppercase bg-slate-900/50 border-b border-slate-700">
             <tr>
-              <th scope="col" class="px-4 py-4">#</th>
-              <th scope="col" class="px-4 py-3">Title</th>
-              <th scope="col" class="px-4 py-3">Category</th>
-              <th scope="col" class="px-4 py-3">Published At</th>
-              <th scope="col" class="px-4 py-3">
-                <span class="sr-only">Actions</span>
-              </th>
+              <th scope="col" class="px-6 py-4 font-semibold">No</th>
+              <th scope="col" class="px-6 py-4 font-semibold">Judul Post</th>
+              <th scope="col" class="px-6 py-4 font-semibold">Kategori</th>
+              <th scope="col" class="px-6 py-4 font-semibold">Tanggal</th>
+              <th scope="col" class="px-6 py-4 font-semibold text-right">Aksi</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody class="divide-y divide-slate-700">
             @foreach ($posts as $post)
-              <tr class="border-b dark:border-gray-700">
-                <th scope="row" class="px-4 py-3 font-medium text-gray-200 whitespace-nowrap dark:text-white">
-                  {{ $loop->iteration }}</th>
-                <td class="px-4 py-3">{{ $post->title }}</td>
-                <td class="px-4 py-3">{{ $post->category->name }}</td>
-                <td class="px-4 py-3">{{ $post->created_at->diffForHumans() }}</td>
-                <td class="px-4 py-3 flex items-center justify-end">
+              <tr class="hover:bg-slate-700/30 transition-colors duration-200">
+                <td class="px-6 py-4 font-medium text-white whitespace-nowrap">
+                  {{ $loop->iteration }}
+                </td>
+                <td class="px-6 py-4 font-medium text-white">
+                  {{ Str::limit($post->title, 40) }}
+                </td>
+                <td class="px-6 py-4">
+                  <span
+                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-500/10 text-indigo-300 border border-indigo-500/20">
+                    {{ $post->category->name }}
+                  </span>
+                </td>
+                <td class="px-6 py-4">
+                  {{ $post->created_at->format('d M Y') }}
+                  <span class="block text-xs text-slate-500 mt-0.5">{{ $post->created_at->diffForHumans() }}</span>
+                </td>
+                <td class="px-6 py-4 text-right">
                   <button id="post-{{ $post->id }}-dropdown-button"
                     data-dropdown-toggle="post-{{ $post->id }}-dropdown"
-                    class="inline-flex items-center text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700 p-1.5 dark:hover-bg-gray-800 text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
+                    class="inline-flex items-center p-2 text-sm font-medium text-center text-slate-400 bg-transparent rounded-lg hover:bg-slate-700 focus:outline-none focus:text-white"
                     type="button">
                     <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20"
                       xmlns="http://www.w3.org/2000/svg">
@@ -95,30 +113,33 @@
                         d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
                     </svg>
                   </button>
+
                   <div id="post-{{ $post->id }}-dropdown"
-                    class="hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600">
-                    <ul class="py-1 text-sm" aria-labelledby="post-{{ $post->id }}-dropdown-button">
+                    class="hidden z-50 w-44 bg-slate-800 rounded-xl divide-y divide-slate-700 shadow-2xl border border-slate-700 ring-1 ring-black/5">
+                    <ul class="py-1 text-sm text-slate-300"
+                      aria-labelledby="post-{{ $post->id }}-dropdown-button">
                       <li>
-                        <a href="/dashboard/{{ $post->slug }}" data-modal-target="readProductModal1"
-                          data-modal-toggle="readProductModal1"
-                          class="flex w-full items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-gray-700 dark:text-gray-200">
-                          <svg class="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 20 20"
-                            fill="currentColor" aria-hidden="true">
-                            <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                            <path fill-rule="evenodd" clip-rule="evenodd"
-                              d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" />
+                        <a href="/dashboard/{{ $post->slug }}"
+                          class="flex w-full items-center py-2.5 px-4 hover:bg-slate-700 hover:text-white transition-colors">
+                          <svg class="w-4 h-4 mr-3 text-slate-400" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
+                            </path>
                           </svg>
-                          Show Post
+                          Lihat
                         </a>
                       </li>
                       <li>
                         <a href="/dashboard/{{ $post->slug }}/edit"
-                          class="flex w-full items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-gray-700 dark:text-gray-200">
-                          <svg class="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 20 20"
-                            fill="currentColor" aria-hidden="true">
-                            <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
-                            <path fill-rule="evenodd" clip-rule="evenodd"
-                              d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" />
+                          class="flex w-full items-center py-2.5 px-4 hover:bg-slate-700 hover:text-white transition-colors">
+                          <svg class="w-4 h-4 mr-3 text-slate-400" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
+                            </path>
                           </svg>
                           Edit
                         </a>
@@ -126,70 +147,78 @@
                       <li>
                         <button type="button" data-modal-target="deleteModal-{{ $post->id }}"
                           data-modal-toggle="deleteModal-{{ $post->id }}"
-                          class="flex w-full items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 text-red-500 dark:hover:text-red-400">
-                          <svg class="w-4 h-4 mr-2" viewbox="0 0 14 15" fill="none"
-                            xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                            <path fill-rule="evenodd" clip-rule="evenodd" fill="currentColor"
-                              d="M6.09922 0.300781C5.93212 0.30087 5.76835 0.347476 5.62625 0.435378C5.48414 0.523281 5.36931 0.649009 5.29462 0.798481L4.64302 2.10078H1.59922C1.36052 2.10078 1.13161 2.1956 0.962823 2.36439C0.79404 2.53317 0.699219 2.76209 0.699219 3.00078C0.699219 3.23948 0.79404 3.46839 0.962823 3.63718C1.13161 3.80596 1.36052 3.90078 1.59922 3.90078V12.9008C1.59922 13.3782 1.78886 13.836 2.12643 14.1736C2.46399 14.5111 2.92183 14.7008 3.39922 14.7008H10.5992C11.0766 14.7008 11.5344 14.5111 11.872 14.1736C12.2096 13.836 12.3992 13.3782 12.3992 12.9008V3.90078C12.6379 3.90078 12.8668 3.80596 13.0356 3.63718C13.2044 3.46839 13.2992 3.23948 13.2992 3.00078C13.2992 2.76209 13.2044 2.53317 13.0356 2.36439C12.8668 2.1956 12.6379 2.10078 12.3992 2.10078H9.35542L8.70382 0.798481C8.62913 0.649009 8.5143 0.523281 8.37219 0.435378C8.23009 0.347476 8.06631 0.30087 7.89922 0.300781H6.09922ZM4.29922 5.70078C4.29922 5.46209 4.39404 5.23317 4.56282 5.06439C4.73161 4.8956 4.96052 4.80078 5.19922 4.80078C5.43791 4.80078 5.66683 4.8956 5.83561 5.06439C6.0044 5.23317 6.09922 5.46209 6.09922 5.70078V11.1008C6.09922 11.3395 6.0044 11.5684 5.83561 11.7372C5.66683 11.906 5.43791 12.0008 5.19922 12.0008C4.96052 12.0008 4.73161 11.906 4.56282 11.7372C4.39404 11.5684 4.29922 11.3395 4.29922 11.1008V5.70078ZM8.79922 4.80078C8.56052 4.80078 8.33161 4.8956 8.16282 5.06439C7.99404 5.23317 7.89922 5.46209 7.89922 5.70078V11.1008C7.89922 11.3395 7.99404 11.5684 8.16282 11.7372C8.33161 11.906 8.56052 12.0008 8.79922 12.0008C9.03791 12.0008 9.26683 11.906 9.43561 11.7372C9.6044 11.5684 9.69922 11.3395 9.69922 11.1008V5.70078C9.69922 5.46209 9.6044 5.23317 9.43561 5.06439C9.26683 4.8956 9.03791 4.80078 8.79922 4.80078Z" />
+                          class="flex w-full items-center py-2.5 px-4 text-red-400 hover:bg-red-900/20 hover:text-red-300 transition-colors">
+                          <svg class="w-4 h-4 mr-3 text-red-400" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                            </path>
                           </svg>
-                          Delete
+                          Hapus
                         </button>
                       </li>
                     </ul>
                   </div>
-                  <form action="/dashboard/{{ $post->slug }}" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <!-- Delete modal -->
-                    <div id="deleteModal-{{ $post->id }}" tabindex="-1" aria-hidden="true"
-                      class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-                      <div class="relative p-4 w-full max-w-md max-h-full">
-                        <!-- Modal content -->
-                        <div class="relative p-4 text-center bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
-                          <button type="button"
-                            class="text-gray-400 absolute top-2.5 right-2.5 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                            data-modal-toggle="deleteModal-{{ $post->id }}">
-                            <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewbox="0 0 20 20"
-                              xmlns="http://www.w3.org/2000/svg">
-                              <path fill-rule="evenodd"
-                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                clip-rule="evenodd" />
-                            </svg>
-                            <span class="sr-only">Close modal</span>
-                          </button>
-                          <svg class="text-gray-400 dark:text-gray-500 w-11 h-11 mb-3.5 mx-auto" aria-hidden="true"
-                            fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+
+                  <div id="deleteModal-{{ $post->id }}" tabindex="-1" aria-hidden="true"
+                    class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-modal md:h-full">
+                    <div class="relative p-4 w-full max-w-md h-full md:h-auto">
+                      <div
+                        class="relative p-4 text-center bg-slate-800 rounded-2xl shadow-2xl border border-slate-700 sm:p-5">
+                        <button type="button"
+                          class="text-slate-400 absolute top-2.5 right-2.5 bg-transparent hover:bg-slate-700 hover:text-white rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+                          data-modal-toggle="deleteModal-{{ $post->id }}">
+                          <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd"
-                              d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                              clip-rule="evenodd" />
+                              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                              clip-rule="evenodd"></path>
                           </svg>
-                          <p class="mb-4 text-gray-500 dark:text-gray-300">Are you sure you want to delete this item?
-                          </p>
-                          <div class="flex justify-center items-center space-x-4">
-                            <button data-modal-toggle="deleteModal-{{ $post->id }}" type="button"
-                              class="py-2 px-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">No,
-                              cancel</button>
-                            <button type="submit"
-                              class="py-2 px-3 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900">Yes,
-                              I'm sure</button>
-                          </div>
+                          <span class="sr-only">Close modal</span>
+                        </button>
+                        <div
+                          class="w-12 h-12 rounded-full bg-red-900/30 p-2 flex items-center justify-center mx-auto mb-4">
+                          <svg class="text-red-500 w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                            </path>
+                          </svg>
                         </div>
+                        <p class="mb-1 text-lg font-bold text-white">Hapus Postingan?</p>
+                        <p class="mb-6 text-slate-400 text-sm">Apakah Anda yakin ingin menghapus
+                          "{{ Str::limit($post->title, 20) }}"? Tindakan ini tidak dapat dibatalkan.</p>
+
+                        <form action="/dashboard/{{ $post->slug }}" method="POST"
+                          class="flex justify-center items-center space-x-3">
+                          @csrf
+                          @method('DELETE')
+                          <button data-modal-toggle="deleteModal-{{ $post->id }}" type="button"
+                            class="py-2.5 px-5 text-sm font-medium text-slate-300 bg-slate-700 rounded-lg border border-slate-600 hover:bg-slate-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-slate-600 transition-colors">
+                            Batal
+                          </button>
+                          <button type="submit"
+                            class="py-2.5 px-5 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-900 shadow-lg shadow-red-600/20 transition-colors">
+                            Ya, Hapus
+                          </button>
+                        </form>
                       </div>
                     </div>
-                  </form>
+                  </div>
+
                 </td>
               </tr>
             @endforeach
           </tbody>
         </table>
       </div>
+
       @if ($posts->hasPages())
-        <div class="p-3">
+        <div class="p-4 border-t border-slate-700/50 bg-slate-800/30">
           {{ $posts->links() }}
         </div>
       @endif
+
     </div>
   </div>
 </section>
-
-<!-- End block -->
