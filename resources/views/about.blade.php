@@ -114,7 +114,7 @@
         {{-- Profile 1 --}}
         <x-team name="Muhammad Yudi Setiawan" role="Founder PRS" job="Web Development"
           desc="Fullstack Developer spesialis Laravel, handle semua dari frontend, backend, API sampai deployment. Aktif eksplor Tailwind, Livewire, dan DevOps tools biar workflow makin efisien."
-          image="{{ asset('img/3.jpg') }}" :links="[
+          image="{{ asset('img/nagi.jpg') }}" :links="[
               'facebook' => 'https://facebook.com/yudsetiawann',
               'instagram' => 'https://instagram.com/yset___/',
               'github' => 'https://github.com/yudsetiawann/',
