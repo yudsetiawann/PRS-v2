@@ -74,7 +74,7 @@
 
       <div class="p-8 md:p-10">
         <div
-          class="prose prose-lg prose-invert max-w-none prose-headings:text-white prose-p:text-slate-300 prose-a:text-indigo-400 prose-blockquote:border-l-indigo-500 prose-blockquote:bg-slate-800/50 prose-blockquote:py-1 prose-blockquote:px-4 prose-img:rounded-xl">
+          class="prose prose-lg text-slate-300 prose-invert max-w-none prose-headings:text-white prose-p:text-slate-300 prose-a:text-indigo-400 prose-blockquote:border-l-indigo-500 prose-blockquote:bg-slate-800/50 prose-blockquote:py-1 prose-blockquote:px-4 prose-img:rounded-xl">
           {!! $post->body !!}
         </div>
       </div>
