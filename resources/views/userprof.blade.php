@@ -29,7 +29,7 @@
 
         <div class="relative group">
           <div
-            class="absolute -inset-0.5 bg-gradient-to-r from-indigo-500 to-cyan-500 rounded-full opacity-50 blur opacity-75 transition duration-200 group-hover:opacity-100">
+            class="absolute -inset-0.5 bg-gradient-to-r from-indigo-500 to-cyan-500 rounded-full blur opacity-75 transition duration-200 group-hover:opacity-100">
           </div>
           <img class="relative w-32 h-32 rounded-full object-cover border-4 border-slate-900 shadow-2xl"
             src="{{ $user->avatar ? asset('storage/' . $user->avatar) : asset('img/default-avatar.jpg') }}"
@@ -46,7 +46,7 @@
 
           <div
             class="inline-flex items-center gap-4 bg-slate-900/50 px-4 py-2 rounded-lg border border-slate-700/50 self-center md:self-start">
-            <span class="text-slate-400 text-sm">Published Articles</span>
+            <span class="text-slate-400 text-sm">Post Published</span>
             <span class="w-px h-4 bg-slate-700"></span>
             <span class="text-white font-bold text-lg">{{ $posts->count() }}</span>
           </div>
@@ -56,7 +56,7 @@
       <div class="border-t border-slate-800 pt-10">
         <h3 class="text-xl font-bold text-white mb-8 flex items-center gap-3">
           <span class="w-1 h-6 bg-indigo-500 rounded-full"></span>
-          Artikel Terbaru
+          Postingan Terbaru
         </h3>
 
         <div class="grid gap-6 md:grid-cols-2">
@@ -117,6 +117,4 @@
 
     </div>
   </section>
-
-  <x-footer />
 </x-layout>
