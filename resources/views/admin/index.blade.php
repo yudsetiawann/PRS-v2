@@ -18,6 +18,11 @@
         </div>
 
         <div class="flex gap-3">
+          <a href="{{ route('admin.users') }}"
+            class="px-5 py-2.5 bg-indigo-600 text-white hover:bg-indigo-700 rounded-xl transition-all font-medium shadow-lg shadow-indigo-500/20">
+            Kelola Users
+          </a>
+
           <a href="{{ route('admin.categories') }}"
             class="px-5 py-2.5 bg-slate-800 text-slate-300 hover:text-white border border-slate-700 rounded-xl hover:bg-slate-700 transition-all font-medium">
             Kelola Kategori

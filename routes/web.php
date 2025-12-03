@@ -67,6 +67,11 @@ Route::middleware(['auth', 'verified', \App\Http\Middleware\IsAdmin::class])->gr
     Route::get('/admin/categories', [AdminController::class, 'categories'])->name('admin.categories');
     Route::post('/admin/categories', [AdminController::class, 'storeCategory'])->name('admin.categories.store');
     Route::delete('/admin/categories/{category:slug}', [AdminController::class, 'destroyCategory'])->name('admin.categories.destroy');
+
+    // Route Manage Users
+    Route::get('/admin/users', [AdminController::class, 'users'])->name('admin.users');
+    Route::patch('/admin/users/{user:username}/role', [AdminController::class, 'toggleAdmin'])->name('admin.users.role');
+    Route::delete('/admin/users/{user:username}', [AdminController::class, 'destroyUser'])->name('admin.users.destroy');
 });
 
 Route::middleware(['auth', 'verified'])->group(function() {

@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\User;
 use App\Models\Category;
-use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
@@ -54,5 +56,43 @@ class AdminController extends Controller
     {
         $category->delete();
         return back()->with('success', 'Category deleted!');
+    }
+
+    // Manage User
+    // 1. TAMPILKAN DAFTAR USER
+    public function users()
+    {
+        return view('admin.users', [
+            // Tampilkan semua user, kecuali user yang sedang login (biar gak hapus diri sendiri)
+            'users' => User::where('id', '!=', Auth::id())->latest()->paginate(10)
+        ]);
+    }
+
+    // 2. UBAH ROLE (PROMOTE/DEMOTE)
+    public function toggleAdmin(User $user)
+    {
+        // Toggle nilai boolean (0 jadi 1, 1 jadi 0)
+        $user->update([
+            'is_admin' => !$user->is_admin
+        ]);
+
+        $status = $user->is_admin ? 'dipromosikan jadi Admin' : 'diturunkan jadi User biasa';
+        return back()->with('success', "User {$user->name} berhasil {$status}!");
+    }
+
+    // 3. HAPUS USER
+    public function destroyUser(User $user)
+    {
+        // 1. Hapus semua komentar user ini (jika ada)
+        $user->comments()->delete();
+
+        // 2. Hapus semua postingan user ini
+        // Karena kita sudah set relasi posts() di model User
+        $user->posts()->delete();
+
+        // 3. Baru hapus usernya
+        $user->delete();
+
+        return back()->with('success', 'User dan seluruh datanya berhasil dihapus!');
     }
 }
