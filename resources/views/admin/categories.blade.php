@@ -2,15 +2,31 @@
   <div class="pt-24 min-h-screen bg-slate-900 py-12">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
 
-      <div class="mb-8 flex items-center gap-4">
-        <a href="{{ route('admin.index') }}"
-          class="p-2 rounded-full bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 transition-colors">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18">
-            </path>
-          </svg>
-        </a>
-        <h1 class="text-2xl font-bold text-white">Manajemen Kategori</h1>
+      <div class="mb-8 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-4 w-full md:w-auto">
+          <a href="{{ route('admin.index') }}"
+            class="p-2 rounded-full bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18">
+              </path>
+            </svg>
+          </a>
+          <h1 class="text-2xl font-bold text-white">Manajemen Kategori</h1>
+        </div>
+
+        <form action="{{ route('admin.categories') }}" method="GET" class="w-full md:w-1/3">
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+              <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+              </svg>
+            </div>
+            <input type="text" name="search" value="{{ request('search') }}"
+              class="block w-full p-3 pl-10 text-sm text-white border border-slate-700 rounded-xl bg-slate-800 focus:ring-indigo-500 focus:border-indigo-500 placeholder-slate-500 transition-all shadow-lg"
+              placeholder="Cari kategori...">
+          </div>
+        </form>
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -40,7 +56,7 @@
 
         <div class="lg:col-span-2">
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            @foreach ($categories as $category)
+            @forelse ($categories as $category)
               <div
                 class="bg-slate-800/30 border border-slate-700 rounded-xl p-4 flex justify-between items-center group hover:border-indigo-500/50 transition-all">
                 <div class="flex items-center gap-3">
@@ -65,7 +81,12 @@
                   </button>
                 </form>
               </div>
-            @endforeach
+            @empty
+              <div
+                class="col-span-full py-8 text-center text-slate-500 border border-dashed border-slate-700 rounded-xl">
+                Kategori tidak ditemukan.
+              </div>
+            @endforelse
           </div>
         </div>
 

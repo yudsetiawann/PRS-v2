@@ -3,7 +3,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
       <div class="mb-8 flex flex-col md:flex-row items-center justify-between gap-4">
-        <div class="flex items-center gap-4">
+        <div class="flex items-center gap-4 w-full md:w-auto">
           <a href="{{ route('admin.index') }}"
             class="p-2 rounded-full bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 transition-colors">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -16,6 +16,20 @@
             <p class="text-slate-400 text-sm">Total User Terdaftar: {{ $users->total() }}</p>
           </div>
         </div>
+
+        <form action="{{ route('admin.users') }}" method="GET" class="w-full md:w-1/3">
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+              <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+              </svg>
+            </div>
+            <input type="text" name="search" value="{{ request('search') }}"
+              class="block w-full p-3 pl-10 text-sm text-white border border-slate-700 rounded-xl bg-slate-800 focus:ring-indigo-500 focus:border-indigo-500 placeholder-slate-500 transition-all shadow-lg"
+              placeholder="Cari nama, username, atau email...">
+          </div>
+        </form>
       </div>
 
       <div class="bg-slate-800/50 backdrop-blur-md border border-slate-700/60 rounded-2xl overflow-hidden shadow-xl">
@@ -30,7 +44,7 @@
               </tr>
             </thead>
             <tbody class="divide-y divide-slate-700">
-              @foreach ($users as $user)
+              @forelse ($users as $user)
                 <tr class="hover:bg-slate-700/30 transition-colors">
                   <td class="px-6 py-4">
                     <div class="flex items-center gap-3">
@@ -65,7 +79,6 @@
 
                   <td class="px-6 py-4">
                     <div class="flex justify-center items-center gap-3">
-
                       <form action="{{ route('admin.users.role', $user->username) }}" method="POST">
                         @csrf
                         @method('PATCH')
@@ -98,11 +111,16 @@
                           </svg>
                         </button>
                       </form>
-
                     </div>
                   </td>
                 </tr>
-              @endforeach
+              @empty
+                <tr>
+                  <td colspan="4" class="px-6 py-10 text-center text-slate-500">
+                    Tidak ada user ditemukan dengan kata kunci "{{ request('search') }}"
+                  </td>
+                </tr>
+              @endforelse
             </tbody>
           </table>
         </div>

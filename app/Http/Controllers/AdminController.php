@@ -30,9 +30,13 @@ class AdminController extends Controller
     // 3. MANAJEMEN KATEGORI (Index & Create)
     public function categories()
     {
-        return view('admin.categories', [
-            'categories' => Category::all()
-        ]);
+        $categories = Category::latest()
+            ->when(request('search'), function ($query) {
+                $query->where('name', 'like', '%' . request('search') . '%');
+            })
+            ->get();
+
+        return view('admin.categories', ['categories' => $categories]);
     }
 
     // 4. STORE KATEGORI BARU
@@ -62,10 +66,20 @@ class AdminController extends Controller
     // 1. TAMPILKAN DAFTAR USER
     public function users()
     {
-        return view('admin.users', [
-            // Tampilkan semua user, kecuali user yang sedang login (biar gak hapus diri sendiri)
-            'users' => User::where('id', '!=', Auth::id())->latest()->paginate(10)
-        ]);
+        $users = User::where('id', '!=', Auth::id())
+            ->when(request('search'), function ($query) {
+                $search = request('search');
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'like', '%' . $search . '%')
+                        ->orWhere('username', 'like', '%' . $search . '%')
+                        ->orWhere('email', 'like', '%' . $search . '%');
+                });
+            })
+            ->latest()
+            ->paginate(10)
+            ->withQueryString(); // Agar pagination tidak mereset pencarian
+
+        return view('admin.users', ['users' => $users]);
     }
 
     // 2. UBAH ROLE (PROMOTE/DEMOTE)
