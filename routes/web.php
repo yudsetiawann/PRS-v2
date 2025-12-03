@@ -1,11 +1,13 @@
 <?php
 
-use App\Http\Controllers\PostDashboardController;
 use App\Models\Post;
 use App\Models\User;
 use App\Models\Category;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PostDashboardController;
 
 Route::get('/', function () {
     return view('home', ['title' => 'Home Page']);
@@ -53,6 +55,19 @@ Route::get('/contact', function () {
     return view('contact', ['title' => 'Contact Us']);
 });
 
+// Route Khusus Komentar (Hanya user login yg bisa komen)
+Route::post('/posts/{post:slug}/comments', [CommentController::class, 'store'])->middleware('auth');
+
+// Route Dashboard Admin (Diproteksi Middleware IsAdmin)
+Route::middleware(['auth', 'verified', \App\Http\Middleware\IsAdmin::class])->group(function () {
+    Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
+    Route::delete('/admin/posts/{post:slug}', [AdminController::class, 'destroyPost'])->name('admin.posts.destroy');
+
+    // Route Kategori
+    Route::get('/admin/categories', [AdminController::class, 'categories'])->name('admin.categories');
+    Route::post('/admin/categories', [AdminController::class, 'storeCategory'])->name('admin.categories.store');
+    Route::delete('/admin/categories/{category:slug}', [AdminController::class, 'destroyCategory'])->name('admin.categories.destroy');
+});
 
 Route::middleware(['auth', 'verified'])->group(function() {
     Route::get('/dashboard', [PostDashboardController::class, 'index'])->name('dashboard');

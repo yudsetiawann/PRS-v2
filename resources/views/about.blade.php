@@ -237,10 +237,10 @@
 
           <div
             class="p-6 bg-slate-800/40 border border-slate-700 rounded-xl flex flex-col items-center text-center hover:bg-slate-800 transition-colors">
-            <img src="https://devicon-website.vercel.app/api/sqlite/original.svg" alt="SQLite"
+            <img src="https://devicon-website.vercel.app/api/mysql/original.svg" alt="MySQL"
               class="w-12 h-12 mb-4">
-            <h4 class="text-white font-bold mb-1">SQLite</h4>
-            <p class="text-xs text-slate-500">Lightweight Database</p>
+            <h4 class="text-white font-bold mb-1">MySQL</h4>
+            <p class="text-xs text-slate-500">Relational Database</p>
           </div>
 
           <div
