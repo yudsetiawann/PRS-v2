@@ -145,8 +145,8 @@
                         </a>
                       </li>
                       <li>
-                        <button type="button" data-modal-target="deleteModal-{{ $post->id }}"
-                          data-modal-toggle="deleteModal-{{ $post->id }}"
+                        <button type="button"
+                          onclick="openDeleteModal('{{ $post->slug }}', '{{ addslashes($post->title) }}')"
                           class="flex w-full items-center py-2.5 px-4 text-red-400 hover:bg-red-900/20 hover:text-red-300 transition-colors">
                           <svg class="w-4 h-4 mr-3 text-red-400" fill="none" stroke="currentColor"
                             viewBox="0 0 24 24">
@@ -159,53 +159,6 @@
                       </li>
                     </ul>
                   </div>
-
-                  <div id="deleteModal-{{ $post->id }}" tabindex="-1" aria-hidden="true"
-                    class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-modal md:h-full">
-                    <div class="relative p-4 w-full max-w-md h-full md:h-auto">
-                      <div
-                        class="relative p-4 text-center bg-slate-800 rounded-2xl shadow-2xl border border-slate-700 sm:p-5">
-                        <button type="button"
-                          class="text-slate-400 absolute top-2.5 right-2.5 bg-transparent hover:bg-slate-700 hover:text-white rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
-                          data-modal-toggle="deleteModal-{{ $post->id }}">
-                          <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd"
-                              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                              clip-rule="evenodd"></path>
-                          </svg>
-                          <span class="sr-only">Close modal</span>
-                        </button>
-                        <div
-                          class="w-12 h-12 rounded-full bg-red-900/30 p-2 flex items-center justify-center mx-auto mb-4">
-                          <svg class="text-red-500 w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
-                            </path>
-                          </svg>
-                        </div>
-                        <p class="mb-1 text-lg font-bold text-white">Hapus Postingan?</p>
-                        <p class="mb-6 text-slate-400 text-sm">Apakah Anda yakin ingin menghapus
-                          "{{ Str::limit($post->title, 20) }}"? Tindakan ini tidak dapat dibatalkan.</p>
-
-                        <form action="/dashboard/{{ $post->slug }}" method="POST"
-                          class="flex justify-center items-center space-x-3">
-                          @csrf
-                          @method('DELETE')
-                          <button data-modal-toggle="deleteModal-{{ $post->id }}" type="button"
-                            class="py-2.5 px-5 text-sm font-medium text-slate-300 bg-slate-700 rounded-lg border border-slate-600 hover:bg-slate-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-slate-600 transition-colors">
-                            Batal
-                          </button>
-                          <button type="submit"
-                            class="py-2.5 px-5 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-900 shadow-lg shadow-red-600/20 transition-colors">
-                            Ya, Hapus
-                          </button>
-                        </form>
-                      </div>
-                    </div>
-                  </div>
-
                 </td>
               </tr>
             @endforeach
@@ -222,3 +175,67 @@
     </div>
   </div>
 </section>
+
+<div id="deleteModal" tabindex="-1" aria-hidden="true"
+  class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-[9999] justify-center items-center w-full md:inset-0 h-modal md:h-full bg-black/50 backdrop-blur-sm">
+  <div class="relative p-4 w-full max-w-md h-full md:h-auto">
+    <div class="relative p-4 text-center bg-slate-800 rounded-2xl shadow-2xl border border-slate-700 sm:p-5">
+      <button type="button" onclick="closeDeleteModal()"
+        class="text-slate-400 absolute top-2.5 right-2.5 bg-transparent hover:bg-slate-700 hover:text-white rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
+        <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd"
+            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+            clip-rule="evenodd"></path>
+        </svg>
+        <span class="sr-only">Close modal</span>
+      </button>
+
+      <div class="w-12 h-12 rounded-full bg-red-900/30 p-2 flex items-center justify-center mx-auto mb-4">
+        <svg class="text-red-500 w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+          </path>
+        </svg>
+      </div>
+
+      <h3 class="mb-1 text-lg font-bold text-white">Konfirmasi Penghapusan</h3>
+      <p class="mb-6 text-slate-400 text-sm">Apakah Anda yakin ingin menghapus postingan "<span id="modalTitle" class="text-white font-medium"></span>"?</p>
+
+      <form id="deleteForm" method="POST" class="flex justify-center items-center space-x-3">
+        @csrf
+        @method('DELETE')
+        <button type="button" onclick="closeDeleteModal()"
+          class="py-2.5 px-5 text-sm font-medium text-slate-300 bg-slate-700 rounded-lg border border-slate-600 hover:bg-slate-600 hover:text-white transition-colors">
+          Batal
+        </button>
+        <button type="submit"
+          class="py-2.5 px-5 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-900 shadow-lg shadow-red-600/20 transition-colors">
+          Ya, Hapus
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+function openDeleteModal(slug, title) {
+    // 1. Set judul di modal
+    document.getElementById('modalTitle').textContent = title;
+
+    // 2. Set action form secara dinamis
+    const form = document.getElementById('deleteForm');
+    form.action = '/dashboard/' + slug;
+
+    // 3. Tampilkan modal
+    const modal = document.getElementById('deleteModal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+}
+
+function closeDeleteModal() {
+    const modal = document.getElementById('deleteModal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+}
+</script>
