@@ -5,10 +5,10 @@
     </h2>
   </x-slot>
 
-  <div class="py-18">
+  <div class="pt-18">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
       <div class="pb-4 lg:pt-4 lg:pb-4">
-        <div class="p-2 text-gray-900">
+        <div class="text-gray-900">
           <x-posts.table :posts='$posts' />
         </div>
       </div>

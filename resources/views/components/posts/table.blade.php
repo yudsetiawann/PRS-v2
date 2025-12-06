@@ -28,7 +28,7 @@
 @endif
 
 <section class="p-4 sm:p-6 antialiased min-h-screen bg-slate-900">
-  <div class="mx-auto max-w-screen-xl px-4 lg:px-12">
+  <div class="mx-auto max-w-screen-xl px-1 lg:px-12">
 
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
       <div>

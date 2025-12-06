@@ -43,16 +43,9 @@
 </head>
 
 <body class="font-sans antialiased">
-  <div class="min-h-screen bg-slate-900 overflow-hidden shadow-xs flex flex-col">
-    @include('layouts.navigation')
-
-    {{-- @isset($header)
-        <header class="bg-white shadow-sm">
-          <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-            {{ $header }}
-          </div>
-        </header>
-      @endisset --}}
+  <div class="min-h-screen bg-slate-900 shadow-xs flex flex-col">
+    {{-- @include('layouts.navigation') --}}
+    <x-navbar />
 
     <main class="flex-1">
       {{ $slot }}
