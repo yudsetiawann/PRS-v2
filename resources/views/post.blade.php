@@ -108,18 +108,22 @@
           </div>
 
           {{-- KOLOM KOMENTAR --}}
-          <div class="bg-slate-800/30 border border-slate-700/50 rounded-2xl p-6 md:p-8 mt-10">
+          <div class="bg-slate-800/30 border border-slate-700/50 rounded-2xl p-6 md:p-8 mt-12">
             <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
-              Komentar ({{ $post->comments->count() }})
+              <svg class="w-6 h-6 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z">
+                </path>
+              </svg>
+              Komentar ({{ $post->allComments->count() }})
             </h3>
 
-            {{-- Form Komentar Utama (Login Only) --}}
             @auth
               <form action="/posts/{{ $post->slug }}/comments" method="POST" class="mb-10">
                 @csrf
                 <div class="mb-4">
                   <label for="body" class="sr-only">Tulis komentar</label>
-                  <textarea name="body" id="body" rows="3" required
+                  <textarea name="body" rows="3" required
                     class="w-full bg-slate-900 border border-slate-700 rounded-xl text-slate-200 p-4 focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder-slate-500 transition-all"
                     placeholder="Apa pendapatmu tentang artikel ini?"></textarea>
                 </div>
@@ -133,17 +137,16 @@
             @else
               <div class="mb-10 p-6 bg-slate-900/50 rounded-xl border border-slate-700 text-center">
                 <p class="text-slate-400">Ingin bergabung dalam diskusi?</p>
-                <a href="/login" class="inline-block mt-3 text-indigo-400 font-semibold hover:text-indigo-300 underline">
-                  Login untuk berkomentar
-                </a>
+                <a href="/login"
+                  class="inline-block mt-3 text-indigo-400 font-semibold hover:text-indigo-300 underline">Login untuk
+                  berkomentar</a>
               </div>
             @endauth
 
-            {{-- List Komentar --}}
-            <div class="space-y-6">
+            <div class="space-y-8">
               @forelse($post->comments as $comment)
 
-                <div x-data="{ openReply: false, isEditing: false }" class="group">
+                <div x-data="{ openReply: false, isEditing: false, showReplies: true }" class="group">
                   <div class="flex gap-4">
                     <div class="flex-shrink-0">
                       <img
@@ -153,7 +156,8 @@
 
                     <div class="flex-grow">
                       <div x-show="!isEditing">
-                        <div class="bg-slate-900/80 border border-slate-700/50 rounded-2xl rounded-tl-none p-4">
+                        <div
+                          class="bg-slate-900/80 border border-slate-700/50 rounded-2xl rounded-tl-none p-4 relative group/edit">
 
                           <div class="flex justify-between items-start mb-2">
                             <h5 class="text-sm font-bold text-white">{{ $comment->user->name }}</h5>
@@ -161,13 +165,13 @@
                           </div>
 
                           <p class="text-slate-300 text-sm leading-relaxed">{{ $comment->body }}</p>
+
                         </div>
 
-                        <div class="flex items-center gap-4 mt-2 ml-2">
-
+                        <div class="flex items-center gap-4 mt-2 ml-2 flex-wrap">
                           @auth
                             <button @click="openReply = !openReply"
-                              class="text-xs text-indigo-400 hover:text-indigo-300 font-medium flex items-center gap-1 transition-colors">
+                              class="text-xs text-indigo-400 hover:text-indigo-300 font-medium flex items-center gap-1">
                               <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                   d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path>
@@ -177,18 +181,53 @@
                           @endauth
 
                           @if (Auth::id() == $comment->user_id)
-                            <button @click="isEditing = true"
-                              class="text-xs text-slate-300 hover:text-white font-medium flex items-center gap-1 transition-colors">
-                              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="flex items-center gap-3 border-l border-slate-700 pl-4">
+                              <button @click="isEditing = true"
+                                class="text-xs text-slate-500 hover:text-white font-medium flex items-center gap-1 transition-colors"
+                                title="Edit">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z">
+                                  </path>
+                                </svg>
+                                Edit
+                              </button>
+
+                              <form action="/comments/{{ $comment->id }}" method="POST"
+                                onsubmit="return confirm('Hapus komentar ini?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit"
+                                  class="text-xs text-slate-500 hover:text-red-400 font-medium flex items-center gap-1 transition-colors"
+                                  title="Hapus">
+                                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                    </path>
+                                  </svg>
+                                  Hapus
+                                </button>
+                              </form>
+                            </div>
+                          @endif
+                          @if ($comment->replies->count() > 0)
+                            <button @click="showReplies = !showReplies"
+                              class="text-xs text-slate-500 hover:text-white font-medium flex items-center gap-1 ml-auto">
+                              <svg x-show="!showReplies" class="w-3 h-3" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                  d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z">
-                                </path>
+                                  d="M19 9l-7 7-7-7"></path>
                               </svg>
-                              Edit
+                              <svg x-show="showReplies" class="w-3 h-3" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M5 15l7-7 7 7"></path>
+                              </svg>
+                              <span
+                                x-text="showReplies ? 'Sembunyikan Balasan' : 'Lihat {{ $comment->replies->count() }} Balasan'"></span>
                             </button>
                           @endif
                         </div>
-
                       </div>
 
                       <div x-show="isEditing" style="display: none;" class="mt-1">
@@ -200,13 +239,9 @@
 
                           <div class="flex items-center gap-2 mt-2">
                             <button type="submit"
-                              class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-lg transition-colors">
-                              Update
-                            </button>
+                              class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-lg transition-colors">Update</button>
                             <button type="button" @click="isEditing = false"
-                              class="px-3 py-1.5 bg-transparent border border-slate-600 text-slate-400 hover:text-white text-xs font-bold rounded-lg transition-colors">
-                              Batal
-                            </button>
+                              class="px-3 py-1.5 bg-transparent border border-slate-600 text-slate-400 hover:text-white text-xs font-bold rounded-lg transition-colors">Batal</button>
                           </div>
                         </form>
                       </div>
@@ -221,9 +256,7 @@
                                 class="w-full bg-slate-900 border border-slate-700 rounded-lg text-sm text-white px-4 py-2 focus:ring-1 focus:ring-indigo-500 placeholder-slate-500"
                                 placeholder="Balas komentar {{ $comment->user->name }}...">
                               <button type="submit"
-                                class="px-4 py-2 bg-indigo-600 text-white text-xs rounded-lg hover:bg-indigo-700">
-                                Kirim
-                              </button>
+                                class="px-4 py-2 bg-indigo-600 text-white text-xs rounded-lg hover:bg-indigo-700">Kirim</button>
                             </div>
                           </form>
                         </div>
@@ -232,9 +265,10 @@
                   </div>
 
                   @if ($comment->replies->count() > 0)
-                    <div class="ml-14 mt-4 space-y-4 border-l-2 border-slate-800 pl-4">
+                    <div x-show="showReplies" x-transition
+                      class="ml-14 mt-4 space-y-4 border-l-2 border-slate-800 pl-4">
                       @foreach ($comment->replies as $reply)
-                        <div x-data="{ isEditingChild: false }" class="flex gap-3">
+                        <div x-data="{ isEditingChild: false }" class="flex gap-3 group/child">
                           <div class="flex-shrink-0">
                             <img
                               src="{{ $reply->user->avatar ? asset('storage/' . $reply->user->avatar) : asset('img/default-avatar.jpg') }}"
@@ -243,7 +277,8 @@
                           <div class="flex-grow">
 
                             <div x-show="!isEditingChild">
-                              <div class="bg-slate-800/50 border border-slate-700/30 rounded-xl rounded-tl-none p-3">
+                              <div
+                                class="group/child-edit bg-slate-800/50 border border-slate-700/30 rounded-xl rounded-tl-none p-3 relative">
                                 <div class="flex justify-between items-start mb-1">
                                   <h5 class="text-xs font-bold text-white">{{ $reply->user->name }}</h5>
                                   <span
@@ -252,17 +287,22 @@
                                 <p class="text-slate-400 text-xs leading-relaxed">{{ $reply->body }}</p>
                               </div>
 
-                              @if (Auth::id() === $reply->user_id)
-                                <div class="mt-1 ml-1">
+                              @if (Auth::id() == $reply->user_id)
+                                <div class="flex items-center gap-3 mt-1 ml-2">
                                   <button @click="isEditingChild = true"
-                                    class="text-[10px] text-slate-300 hover:text-white flex items-center gap-1 transition-colors">
-                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z">
-                                      </path>
-                                    </svg>
+                                    class="text-[10px] text-slate-500 hover:text-white font-medium flex items-center gap-1 transition-colors">
                                     Edit
                                   </button>
+
+                                  <form action="/comments/{{ $reply->id }}" method="POST"
+                                    onsubmit="return confirm('Hapus balasan ini?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit"
+                                      class="text-[10px] text-slate-500 hover:text-red-400 font-medium flex items-center gap-1 transition-colors">
+                                      Hapus
+                                    </button>
+                                  </form>
                                 </div>
                               @endif
                             </div>

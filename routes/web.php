@@ -58,6 +58,7 @@ Route::get('/contact', function () {
 // Route Khusus Komentar (Hanya user login yg bisa komen)
 Route::post('/posts/{post:slug}/comments', [CommentController::class, 'store'])->middleware('auth');
 Route::patch('/comments/{comment}', [CommentController::class, 'update'])->middleware('auth');
+Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->middleware('auth');
 
 // Route Dashboard Admin (Diproteksi Middleware IsAdmin)
 Route::middleware(['auth', 'verified', \App\Http\Middleware\IsAdmin::class])->group(function () {

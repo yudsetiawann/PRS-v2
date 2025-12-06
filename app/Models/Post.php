@@ -35,6 +35,11 @@ class Post extends Model
         return $this->hasMany(Comment::class)->whereNull('parent_id')->latest();
     }
 
+    public function allComments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+    
     public function scopeFilter(Builder $query, array $filters): void
     {
         $query->when($filters['search'] ?? false, function ($query, $search) {

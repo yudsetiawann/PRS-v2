@@ -43,4 +43,16 @@ class CommentController extends Controller
 
         return back()->with('success', 'Komentar berhasil diperbarui!');
     }
+
+    public function destroy(Comment $comment)
+    {
+        // Validasi: Pastikan yang menghapus adalah pemilik komentar
+        if ((int) $comment->user_id !== (int) auth()->id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $comment->delete();
+
+        return back()->with('success', 'Komentar berhasil dihapus!');
+    }
 }
