@@ -27,7 +27,7 @@ class CommentController extends Controller
     public function update(Request $request, Comment $comment)
     {
         // 1. Validasi Otorisasi (Hanya pemilik yang boleh edit)
-        if ($comment->user_id !== auth()->id()) {
+        if ((int) $comment->user_id !== (int) auth()->id()) {
             abort(403, 'Unauthorized action.');
         }
 
