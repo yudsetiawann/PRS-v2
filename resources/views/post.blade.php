@@ -176,9 +176,9 @@
                             </button>
                           @endauth
 
-                          @if (Auth::id() === $comment->user_id)
+                          @if (Auth::id() == $comment->user_id)
                             <button @click="isEditing = true"
-                              class="text-xs text-slate-500 hover:text-white font-medium flex items-center gap-1 transition-colors">
+                              class="text-xs text-slate-300 hover:text-white font-medium flex items-center gap-1 transition-colors">
                               <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                   d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z">
@@ -255,7 +255,7 @@
                               @if (Auth::id() === $reply->user_id)
                                 <div class="mt-1 ml-1">
                                   <button @click="isEditingChild = true"
-                                    class="text-[10px] text-slate-500 hover:text-white flex items-center gap-1 transition-colors">
+                                    class="text-[10px] text-slate-300 hover:text-white flex items-center gap-1 transition-colors">
                                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z">
