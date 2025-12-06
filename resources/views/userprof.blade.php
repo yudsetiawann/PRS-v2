@@ -48,7 +48,7 @@
             class="inline-flex items-center gap-4 bg-slate-900/50 px-4 py-2 rounded-lg border border-slate-700/50 self-center md:self-start">
             <span class="text-slate-400 text-sm">Post Published</span>
             <span class="w-px h-4 bg-slate-700"></span>
-            <span class="text-white font-bold text-lg">{{ $posts->count() }}</span>
+            <span class="text-white font-bold text-lg">{{ $posts->total() }}</span>
           </div>
         </div>
       </div>
