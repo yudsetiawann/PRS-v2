@@ -142,7 +142,9 @@
                   class="w-32 h-32 rounded-full border-4 border-slate-800 object-cover mx-auto shadow-lg">
               </div>
               <div class="text-center mb-6">
-                <h3 class="text-xl font-bold text-white">Muhammad Yudi S.</h3>
+                <a href="https://yudstwan.vercel.app/" target="_blank">
+                  <h3 class="text-xl font-bold text-white">Muhammad Yudi S.</h3>
+                </a>
                 <p class="text-indigo-400 font-medium text-sm">Founder & Fullstack</p>
               </div>
               <p class="text-slate-400 text-sm text-center mb-6 leading-relaxed">
@@ -166,7 +168,9 @@
                   class="w-32 h-32 rounded-full border-4 border-slate-800 object-cover mx-auto shadow-lg">
               </div>
               <div class="text-center mb-6">
-                <h3 class="text-xl font-bold text-white">Fredy Fajar A.P.</h3>
+                <a href="https://isaachuu.vercel.app/" target="_blank">
+                  <h3 class="text-xl font-bold text-white">Fredy Fajar A.P.</h3>
+                </a>
                 <p class="text-indigo-400 font-medium text-sm">Backend Developer</p>
               </div>
               <p class="text-slate-400 text-sm text-center mb-6 leading-relaxed">
@@ -190,7 +194,9 @@
                   class="w-32 h-32 rounded-full border-4 border-slate-800 object-cover mx-auto shadow-lg">
               </div>
               <div class="text-center mb-6">
-                <h3 class="text-xl font-bold text-white">Maulana Aulia R.</h3>
+                <a href="https://www.instagram.com/rhmn_maulana/" target="_blank">
+                  <h3 class="text-xl font-bold text-white">Maulana Aulia R.</h3>
+                </a>
                 <p class="text-indigo-400 font-medium text-sm">Frontend Developer</p>
               </div>
               <p class="text-slate-400 text-sm text-center mb-6 leading-relaxed">
