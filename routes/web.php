@@ -54,7 +54,7 @@ Route::get('/userprof/{user:username}', function (User $user) {
         'user' => $user,
         'posts' => $posts
     ]);
-});
+})->name('user.profile');
 
 Route::get('/categories/{category:slug}', function (Category $category) {
     return view('posts', ['posts' => $category->posts]);
