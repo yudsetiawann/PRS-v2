@@ -4,6 +4,7 @@ use App\Models\Post;
 use App\Models\User;
 use App\Models\Category;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LikeController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\CommentController;
@@ -30,6 +31,14 @@ Route::get('/posts', function () {
 })->name('posts');
 
 Route::get('/posts/{post:slug}', function (Post $post) {
+    // LOGIKA POST VIEWS (Dengan Session agar refresh tidak nambah view berkali-kali)
+    $sessionKey = 'post_viewed_' . $post->id;
+
+    if (!session()->has($sessionKey)) {
+        $post->increment('views_count'); // Tambah 1 ke database
+        session()->put($sessionKey, true); // Simpan tanda di session user
+    }
+
     return view('post', ['title' => 'Single Post', 'post' => $post]);
 })->name('post');
 
@@ -63,6 +72,8 @@ Route::get('/contact', function () {
 Route::post('/posts/{post:slug}/comments', [CommentController::class, 'store'])->middleware('auth');
 Route::patch('/comments/{comment}', [CommentController::class, 'update'])->middleware('auth');
 Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->middleware('auth');
+// Route Like (Hanya user login)
+Route::post('/posts/{post:slug}/like', [LikeController::class, 'toggle'])->middleware('auth')->name('posts.like');
 
 // Route Dashboard Admin (Diproteksi Middleware IsAdmin)
 Route::middleware(['auth', 'verified', \App\Http\Middleware\IsAdmin::class])->group(function () {

@@ -45,20 +45,36 @@ class Post extends Model
         return $this->morphMany(\App\Models\Report::class, 'reportable');
     }
 
+    // Relasi Many-to-Many ke User (Likes)
+    public function likes()
+    {
+        return $this->belongsToMany(User::class, 'post_user_likes', 'post_id', 'user_id');
+    }
+
+    // Helper untuk cek apakah post ini sudah dilike oleh user yang sedang login
+    public function isLikedBy(User $user)
+    {
+        return $this->likes->contains('id', $user->id);
+    }
+
     public function scopeFilter(Builder $query, array $filters): void
     {
         $query->when($filters['search'] ?? false, function ($query, $search) {
-            $query->where('title', 'like', '%'. $search . '%');
+            $query->where('title', 'like', '%' . $search . '%');
         });
 
 
         $query->when($filters['category'] ?? false, function ($query, $category) {
-            $query->whereHas('category', fn(Builder $query) => $query->where('slug', $category)
+            $query->whereHas(
+                'category',
+                fn(Builder $query) => $query->where('slug', $category)
             );
         });
 
         $query->when($filters['author'] ?? false, function ($query, $author) {
-            $query->whereHas('author', fn(Builder $query) => $query->where('username', $author)
+            $query->whereHas(
+                'author',
+                fn(Builder $query) => $query->where('username', $author)
             );
         });
     }

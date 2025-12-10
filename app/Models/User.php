@@ -77,4 +77,10 @@ class User extends Authenticatable
     {
         return in_array($this->role, ['admin', 'super_admin']);
     }
+
+    // User menyukai banyak post
+    public function likedPosts()
+    {
+        return $this->belongsToMany(Post::class, 'post_user_likes', 'user_id', 'post_id');
+    }
 }
