@@ -46,13 +46,14 @@ class CommentController extends Controller
 
     public function destroy(Comment $comment)
     {
-        // Validasi: Pastikan yang menghapus adalah pemilik komentar
-        if ((int) $comment->user_id !== (int) auth()->id()) {
-            abort(403, 'Unauthorized action.');
+        $user = auth()->user();
+
+        // Izinkan jika: Pemilik komentar ATAU punya akses Admin (Admin/SuperAdmin)
+        if ($comment->user_id == $user->id || $user->hasAdminAccess()) {
+            $comment->delete();
+            return back()->with('success', 'Komentar dihapus.');
         }
 
-        $comment->delete();
-
-        return back()->with('success', 'Komentar berhasil dihapus!');
+        abort(403, 'Unauthorized action.');
     }
 }
