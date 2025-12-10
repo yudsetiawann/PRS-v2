@@ -107,6 +107,25 @@
             </div>
           </div>
 
+          {{-- Footer Artikel & Report Post --}}
+          <div class="mt-12 pt-8 border-t border-slate-700/50 flex flex-wrap justify-between items-center gap-4">
+            <div class="text-slate-500 text-sm italic">
+              Terima kasih telah membaca.
+            </div>
+
+            {{-- TOMBOL REPORT POSTINGAN --}}
+            @auth
+              <button onclick="openReportModal('post', {{ $post->id }})"
+                class="text-slate-500 hover:text-red-500 text-xs flex items-center gap-1 transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M3 21v-8a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5-5 5H5a2 2 0 01-2 2z" />
+                </svg>
+                Lapor Postingan
+              </button>
+            @endauth
+          </div>
+
           {{-- KOLOM KOMENTAR --}}
           <div class="bg-slate-800/30 border border-slate-700/50 rounded-2xl p-6 md:p-8 mt-12">
             <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
@@ -177,6 +196,17 @@
                                   d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path>
                               </svg>
                               Balas
+                            </button>
+
+                            {{-- TOMBOL REPORT KOMENTAR UTAMA --}}
+                            <button onclick="openReportModal('comment', {{ $comment->id }})"
+                              class="text-slate-500 hover:text-red-500 text-xs flex items-center gap-1 transition-colors"
+                              title="Lapor Komentar">
+                              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M3 21v-8a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5-5 5H5a2 2 0 01-2 2z" />
+                              </svg>
+                              Lapor
                             </button>
                           @endauth
 
@@ -287,8 +317,16 @@
                                 <p class="text-slate-400 text-xs leading-relaxed">{{ $reply->body }}</p>
                               </div>
 
-                              @if (Auth::id() == $reply->user_id)
-                                <div class="flex items-center gap-3 mt-1 ml-2">
+                              <div class="flex items-center gap-3 mt-1 ml-2">
+                                {{-- TOMBOL REPORT BALASAN --}}
+                                @auth
+                                  <button onclick="openReportModal('comment', {{ $reply->id }})"
+                                    class="text-[10px] text-slate-500 hover:text-red-500 font-medium flex items-center gap-1 transition-colors">
+                                    Lapor
+                                  </button>
+                                @endauth
+
+                                @if (Auth::id() == $reply->user_id)
                                   <button @click="isEditingChild = true"
                                     class="text-[10px] text-slate-500 hover:text-white font-medium flex items-center gap-1 transition-colors">
                                     Edit
@@ -303,8 +341,8 @@
                                       Hapus
                                     </button>
                                   </form>
-                                </div>
-                              @endif
+                                @endif
+                              </div>
                             </div>
 
                             <div x-show="isEditingChild" style="display: none;" class="mt-2">
@@ -334,21 +372,58 @@
             </div>
           </div>
 
-          {{-- Footer Artikel --}}
-          <div class="mt-12 pt-8 border-t border-slate-700/50 flex justify-between items-center">
-            <div class="text-slate-500 text-sm italic">
-              Terima kasih telah membaca.
-            </div>
-          </div>
-
         </div>
       </article>
 
     </div>
   </section>
 
-  {{-- Script Copy Link --}}
+  {{-- MODAL REPORT --}}
+  <div id="reportModal"
+    class="hidden fixed inset-0 z-[9999] bg-black/70 flex items-center justify-center backdrop-blur-sm transition-opacity duration-300 px-4">
+    <div class="bg-slate-800 p-6 rounded-xl w-full max-w-md border border-slate-700 shadow-2xl relative">
+      {{-- Tombol Close X --}}
+      <button onclick="document.getElementById('reportModal').classList.add('hidden')"
+        class="absolute top-4 right-4 text-slate-400 hover:text-white">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd"
+            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+            clip-rule="evenodd" />
+        </svg>
+      </button>
+
+      <h3 class="text-white font-bold text-lg mb-1">Laporkan Konten</h3>
+      <p class="text-slate-400 text-xs mb-4">Bantu kami menjaga komunitas tetap aman.</p>
+
+      <form action="{{ route('report.store') }}" method="POST">
+        @csrf
+        <input type="hidden" name="type" id="reportType">
+        <input type="hidden" name="id" id="reportId">
+
+        <label class="text-slate-300 text-sm font-medium block mb-2">Alasan Pelaporan:</label>
+        <textarea name="reason"
+          class="w-full bg-slate-900 border border-slate-600 text-slate-200 rounded-lg p-3 text-sm mb-4 focus:ring-2 focus:ring-red-500 focus:border-transparent placeholder-slate-600"
+          rows="4" required placeholder="Contoh: Mengandung ujaran kebencian, spam, atau informasi palsu..."></textarea>
+
+        <div class="flex justify-end gap-3">
+          <button type="button" onclick="document.getElementById('reportModal').classList.add('hidden')"
+            class="px-4 py-2 border border-slate-600 text-slate-300 text-sm rounded-lg hover:bg-slate-700 transition-colors">Batal</button>
+          <button type="submit"
+            class="px-4 py-2 bg-red-600 text-white font-medium rounded-lg text-sm hover:bg-red-700 shadow-lg shadow-red-500/20 transition-colors">Kirim
+            Laporan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  {{-- Script Copy Link & Report Modal --}}
   <script>
+    function openReportModal(type, id) {
+      document.getElementById('reportType').value = type;
+      document.getElementById('reportId').value = id;
+      document.getElementById('reportModal').classList.remove('hidden');
+    }
+
     function safeCopyLink() {
       const url = window.location.href;
       if (navigator.clipboard && window.isSecureContext) {

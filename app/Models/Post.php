@@ -39,7 +39,12 @@ class Post extends Model
     {
         return $this->hasMany(Comment::class);
     }
-    
+
+    public function reports()
+    {
+        return $this->morphMany(\App\Models\Report::class, 'reportable');
+    }
+
     public function scopeFilter(Builder $query, array $filters): void
     {
         $query->when($filters['search'] ?? false, function ($query, $search) {

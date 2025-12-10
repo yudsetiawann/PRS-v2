@@ -5,6 +5,7 @@ use App\Models\User;
 use App\Models\Category;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PostDashboardController;
@@ -12,6 +13,9 @@ use App\Http\Controllers\PostDashboardController;
 Route::get('/', function () {
     return view('home', ['title' => 'Home Page']);
 })->name('home');
+
+// Route untuk User melapor (Public/Auth User)
+Route::post('/report', [ReportController::class, 'store'])->name('report.store')->middleware('auth');
 
 Route::get('/posts', function () {
     $categoryName = null;
@@ -25,7 +29,7 @@ Route::get('/posts', function () {
     return view('posts', ['title' => $title, 'posts' => $posts]);
 })->name('posts');
 
-Route::get('/posts/{post:slug}', function(Post $post) {
+Route::get('/posts/{post:slug}', function (Post $post) {
     return view('post', ['title' => 'Single Post', 'post' => $post]);
 })->name('post');
 
@@ -74,9 +78,17 @@ Route::middleware(['auth', 'verified', \App\Http\Middleware\IsAdmin::class])->gr
     Route::get('/admin/users', [AdminController::class, 'users'])->name('admin.users');
     Route::patch('/admin/users/{user:username}/role', [AdminController::class, 'toggleAdmin'])->name('admin.users.role');
     Route::delete('/admin/users/{user:username}', [AdminController::class, 'destroyUser'])->name('admin.users.destroy');
+
+    // User Management (Update Route Name biar sesuai controller baru)
+    Route::patch('/admin/users/{user:username}/role', [AdminController::class, 'toggleRole'])->name('admin.users.role');
+
+    // Reports Routes
+    Route::get('/admin/reports', [AdminController::class, 'reports'])->name('admin.reports');
+    Route::patch('/admin/reports/{report}/solve', [AdminController::class, 'solveReport'])->name('admin.reports.solve');
+    Route::delete('/admin/reports/{report}/content', [AdminController::class, 'destroyReportedContent'])->name('admin.reports.destroy_content');
 });
 
-Route::middleware(['auth', 'verified'])->group(function() {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [PostDashboardController::class, 'index'])->name('dashboard');
     Route::post('/dashboard', [PostDashboardController::class, 'store']);
     Route::get('/dashboard/create', [PostDashboardController::class, 'create']);
@@ -97,4 +109,4 @@ Route::middleware('auth')->group(function () {
 });
 
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
