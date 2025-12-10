@@ -67,9 +67,16 @@
                 <div class="px-4 py-3 border-b border-slate-700/50 mb-1">
                   <p class="text-xs text-slate-400">Signed in as</p>
                   <p class="text-sm font-semibold text-white truncate">{{ Auth::user()->username }}</p>
+                  @if (Auth::user()->role === 'super_admin')
+                    <span class="text-[10px] font-bold text-yellow-400 uppercase tracking-wider">Super Admin</span>
+                  @elseif(Auth::user()->role === 'admin')
+                    <span class="text-[10px] font-bold text-indigo-400 uppercase tracking-wider">Administrator</span>
+                  @else
+                    <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Member</span>
+                  @endif
                 </div>
 
-                @if (Auth::user()->is_admin ?? false)
+                @if (in_array(Auth::user()->role, ['admin', 'super_admin']))
                   <a href="{{ route('admin.index') }}"
                     class="group flex items-center px-4 py-2 text-sm text-yellow-400 hover:bg-yellow-500/10 hover:text-yellow-300 transition-colors border-b border-slate-700/30"
                     role="menuitem">
@@ -179,7 +186,7 @@
           </div>
         </div>
         <div class="space-y-1 px-4">
-          @if (Auth::user()->is_admin ?? false)
+          @if (in_array(Auth::user()->role, ['admin', 'super_admin']))
             <a href="{{ route('admin.index') }}"
               class="block rounded-md px-3 py-2 text-base font-medium text-yellow-400 hover:bg-slate-800 transition-colors">Admin
               Panel</a>
