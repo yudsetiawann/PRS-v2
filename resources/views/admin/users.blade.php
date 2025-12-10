@@ -48,11 +48,19 @@
                 <tr class="hover:bg-slate-700/30 transition-colors">
                   <td class="px-6 py-4">
                     <div class="flex items-center gap-3">
-                      <img
-                        src="{{ $user->avatar ? asset('storage/' . $user->avatar) : asset('img/default-avatar.jpg') }}"
-                        class="w-10 h-10 rounded-full object-cover border border-slate-600">
+                      <a href="{{ route('user.profile', $user->username) }}" class="shrink-0">
+                        <img
+                          src="{{ $user->avatar ? asset('storage/' . $user->avatar) : asset('img/default-avatar.jpg') }}"
+                          class="w-10 h-10 rounded-full object-cover border border-slate-600 hover:border-indigo-500 hover:scale-105 transition-all duration-200"
+                          alt="{{ $user->name }}" title="Lihat Profil">
+                      </a>
                       <div>
-                        <div class="font-bold text-white">{{ $user->name }}</div>
+                        <a href="{{ route('user.profile', $user->username) }}" class="group">
+                          <div
+                            class="font-bold text-white group-hover:text-indigo-400 group-hover:underline transition-colors cursor-pointer">
+                            {{ $user->name }}
+                          </div>
+                        </a>
                         <div class="text-xs text-slate-500">{{ $user->email }}</div>
                         <div class="text-xs text-indigo-400">{{ '@' . $user->username }}</div>
                       </div>
