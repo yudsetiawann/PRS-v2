@@ -26,7 +26,7 @@ class User extends Authenticatable
         'email',
         'password',
         'avatar',
-        'is_admin',
+        'role',
     ];
 
     /**
@@ -62,9 +62,19 @@ class User extends Authenticatable
         return $this->hasMany(Comment::class);
     }
 
-    // Helper untuk cek apakah user adalah admin
-    public function isAdmin(): bool
+    // Helper roles
+    public function isSuperAdmin()
     {
-        return $this->is_admin === 1;
+        return $this->role === 'super_admin';
+    }
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
+
+    // Admin biasa ATAU Super Admin (untuk akses dashboard umum)
+    public function hasAdminAccess()
+    {
+        return in_array($this->role, ['admin', 'super_admin']);
     }
 }

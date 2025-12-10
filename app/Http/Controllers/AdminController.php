@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use App\Models\User;
+use App\Models\Report;
 use App\Models\Category;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -63,50 +64,77 @@ class AdminController extends Controller
     }
 
     // Manage User
-    // 1. TAMPILKAN DAFTAR USER
+    // 1. MANAJEMEN USER (Update Logika)
     public function users()
     {
-        $users = User::where('id', '!=', Auth::id())
-            ->when(request('search'), function ($query) {
-                $search = request('search');
-                $query->where(function ($q) use ($search) {
-                    $q->where('name', 'like', '%' . $search . '%')
-                        ->orWhere('username', 'like', '%' . $search . '%')
-                        ->orWhere('email', 'like', '%' . $search . '%');
-                });
-            })
-            ->latest()
-            ->paginate(10)
-            ->withQueryString(); // Agar pagination tidak mereset pencarian
-
+        // Super Admin lihat semua, Admin biasa hanya lihat User & Admin lain (tapi dibatasi di View)
+        $users = User::where('id', '!=', Auth::id())->latest()->paginate(10);
         return view('admin.users', ['users' => $users]);
     }
 
-    // 2. UBAH ROLE (PROMOTE/DEMOTE)
-    public function toggleAdmin(User $user)
+    // 2. PROMOTE/DEMOTE (Logic Super Admin)
+    public function toggleRole(User $user)
     {
-        // Toggle nilai boolean (0 jadi 1, 1 jadi 0)
-        $user->update([
-            'is_admin' => !$user->is_admin
-        ]);
+        $currentUser = Auth::user();
 
-        $status = $user->is_admin ? 'dipromosikan jadi Admin' : 'diturunkan jadi User biasa';
-        return back()->with('success', "User {$user->name} berhasil {$status}!");
+        // CEGAH Admin biasa mengutak-atik Admin lain atau Super Admin
+        if ($currentUser->role === 'admin' && in_array($user->role, ['admin', 'super_admin'])) {
+            return back()->with('error', 'Anda tidak memiliki hak akses untuk mengubah admin ini.');
+        }
+
+        // Logika Toggle
+        if ($user->role === 'user') {
+            $user->update(['role' => 'admin']);
+            $msg = 'User dijadikan Admin.';
+        } elseif ($user->role === 'admin') {
+            // Hanya Super Admin yang bisa demote Admin
+            if ($currentUser->role !== 'super_admin') abort(403);
+            $user->update(['role' => 'user']);
+            $msg = 'Admin diturunkan jadi User.';
+        }
+
+        return back()->with('success', $msg);
     }
 
-    // 3. HAPUS USER
     public function destroyUser(User $user)
     {
-        // 1. Hapus semua komentar user ini (jika ada)
-        $user->comments()->delete();
+        $currentUser = Auth::user();
 
-        // 2. Hapus semua postingan user ini
-        // Karena kita sudah set relasi posts() di model User
-        $user->posts()->delete();
+        // VALIDASI KETAT
+        // 1. Admin tidak bisa hapus Super Admin
+        // 2. Admin tidak bisa hapus sesama Admin
+        if ($currentUser->role === 'admin' && in_array($user->role, ['admin', 'super_admin'])) {
+            return back()->with('error', 'Hanya Super Admin yang bisa menghapus akun Admin.');
+        }
 
-        // 3. Baru hapus usernya
-        $user->delete();
+        $user->delete(); // Cascade delete post/comment otomatis jalan
+        return back()->with('success', 'User berhasil dihapus.');
+    }
 
-        return back()->with('success', 'User dan seluruh datanya berhasil dihapus!');
+    // 3. FITUR REPORT
+    public function reports()
+    {
+        $reports = Report::where('status', 'pending')->latest()->paginate(10);
+        return view('admin.reports', ['reports' => $reports]);
+    }
+
+    public function solveReport(Report $report)
+    {
+        $report->update(['status' => 'solved']);
+        // Atau jika ingin dihapus: $report->delete();
+        return back()->with('success', 'Laporan ditandai selesai.');
+    }
+
+    // Hapus konten yang dilaporkan (Post/Komen)
+    public function destroyReportedContent($id)
+    {
+        $report = Report::findOrFail($id);
+
+        if ($report->reportable) {
+            $report->reportable->delete(); // Hapus Post atau Komen aslinya
+            $report->update(['status' => 'solved']);
+        }
+
+        return back()->with('success', 'Konten melanggar berhasil dihapus.');
     }
 }

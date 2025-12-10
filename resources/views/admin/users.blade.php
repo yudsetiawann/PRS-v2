@@ -59,8 +59,14 @@
                     </div>
                   </td>
 
+                  {{-- PERBAIKAN DI SINI: Cek berdasarkan 'role', bukan 'is_admin' --}}
                   <td class="px-6 py-4">
-                    @if ($user->is_admin)
+                    @if ($user->role === 'super_admin')
+                      <span
+                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-500/10 text-red-500 border border-red-500/20">
+                        Super Admin
+                      </span>
+                    @elseif ($user->role === 'admin')
                       <span
                         class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-500/10 text-yellow-500 border border-yellow-500/20">
                         Admin
@@ -79,38 +85,54 @@
 
                   <td class="px-6 py-4">
                     <div class="flex justify-center items-center gap-3">
-                      <form action="{{ route('admin.users.role', $user->username) }}" method="POST">
-                        @csrf
-                        @method('PATCH')
-                        @if ($user->is_admin)
-                          <button type="submit"
-                            class="text-xs font-bold text-yellow-500 hover:text-white border border-yellow-500/30 hover:bg-yellow-600 px-3 py-1.5 rounded-lg transition-all"
-                            title="Turunkan jadi User Biasa">
-                            Demote
-                          </button>
-                        @else
-                          <button type="submit"
-                            class="text-xs font-bold text-indigo-400 hover:text-white border border-indigo-500/30 hover:bg-indigo-600 px-3 py-1.5 rounded-lg transition-all"
-                            title="Jadikan Admin">
-                            Promote Admin
-                          </button>
-                        @endif
-                      </form>
 
-                      <form action="{{ route('admin.users.destroy', $user->username) }}" method="POST"
-                        onsubmit="return confirm('Yakin ingin menghapus user ini beserta seluruh postingannya?');">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit"
-                          class="p-2 text-slate-500 hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-colors"
-                          title="Hapus User">
-                          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
-                            </path>
-                          </svg>
-                        </button>
-                      </form>
+                      {{-- LOGIKA TOMBOL ROLE --}}
+                      @if (Auth::user()->role === 'super_admin')
+                        {{-- Super Admin bisa ubah siapa saja --}}
+                        <form action="{{ route('admin.users.role', $user->username) }}" method="POST">
+                          @csrf @method('PATCH')
+                          @if ($user->role === 'admin')
+                            <button
+                              class="text-yellow-500 border border-yellow-500/30 px-3 py-1 rounded hover:bg-yellow-500/10 text-xs transition-colors">Demote
+                              Admin</button>
+                          @elseif($user->role === 'user')
+                            <button
+                              class="text-indigo-400 border border-indigo-500/30 px-3 py-1 rounded hover:bg-indigo-500/10 text-xs transition-colors">Promote
+                              Admin</button>
+                          @endif
+                        </form>
+                      @elseif(Auth::user()->role === 'admin')
+                        {{-- Admin Biasa: Hanya bisa promote User, TIDAK BISA sentuh Admin lain/Super Admin --}}
+                        @if ($user->role === 'user')
+                          <form action="{{ route('admin.users.role', $user->username) }}" method="POST">
+                            @csrf @method('PATCH')
+                            <button
+                              class="text-indigo-400 border border-indigo-500/30 px-3 py-1 rounded hover:bg-indigo-500/10 text-xs transition-colors">Promote
+                              Admin</button>
+                          </form>
+                        @elseif($user->role === 'admin' || $user->role === 'super_admin')
+                          <span class="text-xs text-slate-500 italic">No Access</span>
+                        @endif
+                      @endif
+
+                      {{-- LOGIKA TOMBOL HAPUS (Sudah dirapikan agar tidak duplikat) --}}
+                      @if (Auth::user()->role === 'super_admin' || (Auth::user()->role === 'admin' && $user->role === 'user'))
+                        <form action="{{ route('admin.users.destroy', $user->username) }}" method="POST"
+                          onsubmit="return confirm('Yakin ingin menghapus user ini beserta seluruh postingannya?');">
+                          @csrf
+                          @method('DELETE')
+                          <button type="submit"
+                            class="p-2 text-slate-500 hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-colors"
+                            title="Hapus User">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                              </path>
+                            </svg>
+                          </button>
+                        </form>
+                      @endif
+
                     </div>
                   </td>
                 </tr>
