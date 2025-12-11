@@ -28,17 +28,38 @@
             <input type="hidden" name="author" value="{{ request('author') }}">
           @endif
 
-          <div class="relative">
-            <div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
-              <svg class="w-5 h-5 text-slate-500 group-focus-within:text-indigo-400 transition-colors duration-300"
-                fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-              </svg>
+          {{-- Container Flex untuk mensejajarkan Tombol (+) dan Input Search --}}
+          <div class="flex items-center gap-3">
+
+            {{-- 1. Tombol Create Post (Hanya muncul jika Login) --}}
+            @auth
+              <a href="/dashboard/create"
+                class="flex-none flex items-center justify-center w-11 h-11 bg-indigo-600 text-white rounded-full shadow-lg hover:bg-indigo-500 hover:scale-105 transition-all duration-300 focus:ring-2 focus:ring-indigo-500/50"
+                title="Buat Postingan Baru">
+                {{-- Icon Plus (+) --}}
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                </svg>
+              </a>
+            @endauth
+
+            {{-- 2. Input Pencarian (Codingan lama Anda, dibungkus div flex-1) --}}
+            <div class="relative flex-1">
+
+              {{-- Icon Search (Sudah ada di kode Anda, ini posisinya di dalam input sebelah kiri) --}}
+              <div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none z-10 text-slate-400">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                  stroke="currentColor" class="size-6">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                </svg>
+              </div>
+
+              <input type="search" name="search"
+                class="block w-full py-3 pl-12 pr-4 text-sm text-white bg-slate-800/50 border border-slate-700 rounded-full shadow-lg backdrop-blur-sm focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 focus:outline-none transition-all duration-300 placeholder-slate-500 hover:bg-slate-800/80"
+                placeholder="Cari judul atau penulis..." autocomplete="off" value="{{ request('search') }}">
             </div>
-            <input type="search" name="search"
-              class="block w-full py-3 pl-12 pr-4 text-sm text-white bg-slate-800/50 border border-slate-700 rounded-full shadow-lg backdrop-blur-sm focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 focus:outline-none transition-all duration-300 placeholder-slate-500 hover:bg-slate-800/80"
-              placeholder="Cari artikel..." autocomplete="off" value="{{ request('search') }}">
+
           </div>
         </form>
       </div>
@@ -118,8 +139,9 @@
                 </path>
               </svg>
             </div>
-            <h3 class="text-xl font-semibold text-white">Artikel tidak ditemukan</h3>
-            <p class="text-slate-400 mt-2 max-w-sm mx-auto mb-8">Kami tidak dapat menemukan artikel dengan kata kunci
+            <h3 class="text-xl font-semibold text-white">Postingan/Penulis tidak ditemukan</h3>
+            <p class="text-slate-400 mt-2 max-w-sm mx-auto mb-8">Kami tidak dapat menemukan postingan/penulis dengan
+              kata kunci
               tersebut.</p>
             <a href="/posts"
               class="inline-flex items-center px-6 py-3 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-full transition-all shadow-lg shadow-indigo-500/25 hover:-translate-y-0.5">
