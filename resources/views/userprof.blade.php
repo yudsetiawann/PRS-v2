@@ -45,7 +45,7 @@
           </p>
 
           {{-- ADD: Social Media Links --}}
-          <div class="flex items-center gap-3 mb-6">
+          <div class="flex items-center justify-center md:justify-start gap-3 mb-6">
 
             {{-- Instagram --}}
             @if ($user->instagram)
