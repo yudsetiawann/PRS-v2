@@ -9,6 +9,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ImageUploadController;
 use App\Http\Controllers\PostDashboardController;
 
 Route::get('/', function () {
@@ -122,6 +123,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::post('/upload', [ProfileController::class, 'upload']);
+    Route::post('/upload-image', [ImageUploadController::class, 'store'])->name('upload.image');
 });
 
 
