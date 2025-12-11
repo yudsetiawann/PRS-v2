@@ -27,6 +27,9 @@ class User extends Authenticatable
         'password',
         'avatar',
         'role',
+        'instagram',
+        'linkedin',
+        'github',
     ];
 
     /**
