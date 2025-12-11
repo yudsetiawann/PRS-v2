@@ -55,6 +55,49 @@
       /* Slate-500 */
       font-style: normal;
     }
+
+    /* Align */
+    .ql-align-justify {
+      text-align: justify;
+    }
+
+    .ql-align-center {
+      text-align: center;
+    }
+
+    .ql-align-right {
+      text-align: right;
+    }
+
+    /* 1. Reset CSS Image agar bisa di-resize */
+    #editor img {
+      display: inline-block;
+      width: auto;
+      /* Jangan 100%, biarkan mengikuti atribut width dari resizer */
+    }
+
+    /* 2. Style Editor agar gambar responsif tapi tetap ikut resize */
+    .ql-editor img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    /* 3. Perbaiki Posisi Overlay (Kotak Resize) */
+    .blot-formatter__overlay {
+      border: 2px solid #6366f1 !important;
+      /* Warna ungu indigo */
+      background-color: rgba(99, 102, 241, 0.1);
+      /* Sedikit background transparan */
+      z-index: 50;
+      pointer-events: none;
+      /* Penting: agar klik tembus ke gambar */
+    }
+
+    /* Agar handle (titik-titik sudut) bisa diklik */
+    .blot-formatter__handler {
+      pointer-events: auto;
+      background-color: #6366f1 !important;
+    }
   </style>
 @endpush
 
@@ -149,53 +192,107 @@
 
 @push('script')
   <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+  <script src="https://unpkg.com/quill-blot-formatter/dist/quill-blot-formatter.min.js"></script>
+
   <script>
-    // Initialize Quill
+    // --- 1. Register Module BlotFormatter dengan Benar ---
+    // Pastikan kita menangkap class-nya dengan benar (Support CDN)
+    const BlotFormatter = QuillBlotFormatter.default || QuillBlotFormatter;
+    Quill.register('modules/blotFormatter', BlotFormatter);
+
+    // --- 2. Image Handler Custom (Agar upload ke server) ---
+    function selectLocalImage() {
+      const input = document.createElement('input');
+      input.setAttribute('type', 'file');
+      input.setAttribute('accept', 'image/*');
+      input.click();
+
+      input.onchange = () => {
+        const file = input.files[0];
+        if (/^image\//.test(file.type)) {
+          saveToServer(file);
+        } else {
+          console.warn('You could only upload images.');
+        }
+      };
+    }
+
+    function saveToServer(file) {
+      const fd = new FormData();
+      fd.append('image', file);
+
+      fetch('/upload-image', {
+          method: 'POST',
+          body: fd,
+          headers: {
+            'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
+          }
+        })
+        .then(response => response.json())
+        .then(result => {
+          const url = result.url;
+          insertToEditor(url);
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('Gagal mengupload gambar.');
+        });
+    }
+
+    function insertToEditor(url) {
+      const range = quill.getSelection();
+      quill.insertEmbed(range.index, 'image', url);
+      quill.setSelection(range.index + 1);
+    }
+
+    // --- 3. Inisialisasi Quill ---
     const quill = new Quill('#editor', {
       theme: 'snow',
       placeholder: 'Tulis ide brilianmu di sini...',
       modules: {
-        toolbar: [
-          [{
-            'header': [1, 2, 3, false]
-          }],
-          ['bold', 'italic', 'underline', 'strike'],
-          ['blockquote', 'code-block'],
-          [{
-            'list': 'ordered'
-          }, {
-            'list': 'bullet'
-          }],
-          [{
-            'color': []
-          }, {
-            'background': []
-          }],
-          ['link', 'clean']
-        ]
+        // HANYA gunakan blotFormatter, JANGAN pakai imageResize
+        blotFormatter: {
+          overlay: {
+            style: {
+              border: '2px solid #6366f1', // Warna border saat diklik
+            }
+          }
+        },
+        toolbar: {
+          container: [
+            [{
+              'header': [1, 2, 3, false]
+            }],
+            ['bold', 'italic', 'underline', 'strike'],
+            ['blockquote', 'code-block'],
+            [{
+              'align': []
+            }], // Dropdown Align
+            [{
+              'list': 'ordered'
+            }, {
+              'list': 'bullet'
+            }],
+            [{
+              'color': []
+            }, {
+              'background': []
+            }],
+            ['link', 'image', 'clean']
+          ],
+          handlers: {
+            'image': selectLocalImage
+          }
+        }
       }
     });
 
+    // --- Form Handling ---
     const postForm = document.querySelector('#post-form');
     const postBody = document.querySelector('#body');
 
-    // Handle Form Submit
     postForm.addEventListener('submit', function(e) {
-      // Ambil HTML content dari Quill
-      const content = quill.root.innerHTML;
-
-      // Masukkan ke textarea hidden
-      postBody.value = content;
-
-      // Jika kosong atau hanya berisi tag p kosong, set value jadi empty string
-      if (quill.getText().trim().length === 0) {
-        // Optional: prevent submit if empty
-        // e.preventDefault();
-        // alert('Konten tidak boleh kosong!');
-      }
+      postBody.value = quill.root.innerHTML;
     });
-
-    // Jika ada old data (saat error validasi), Quill akan merender isinya dari div#editor secara otomatis
-    // karena kita menaruh {!! old('body') !!} di dalam div tersebut.
   </script>
 @endpush

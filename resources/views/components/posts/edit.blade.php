@@ -46,6 +46,49 @@
       stroke: #fff !important;
     }
 
+    /* Tambahkan ini di CSS global agar align justify berfungsi saat artikel dibaca */
+    .ql-align-justify {
+      text-align: justify;
+    }
+
+    .ql-align-center {
+      text-align: center;
+    }
+
+    .ql-align-right {
+      text-align: right;
+    }
+
+    /* 1. Reset CSS Image agar bisa di-resize */
+    #editor img {
+      display: inline-block;
+      width: auto;
+      /* Jangan 100%, biarkan mengikuti atribut width dari resizer */
+    }
+
+    /* 2. Style Editor agar gambar responsif tapi tetap ikut resize */
+    .ql-editor img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    /* 3. Perbaiki Posisi Overlay (Kotak Resize) */
+    .blot-formatter__overlay {
+      border: 2px solid #6366f1 !important;
+      /* Warna ungu indigo */
+      background-color: rgba(99, 102, 241, 0.1);
+      /* Sedikit background transparan */
+      z-index: 50;
+      pointer-events: none;
+      /* Penting: agar klik tembus ke gambar */
+    }
+
+    /* Agar handle (titik-titik sudut) bisa diklik */
+    .blot-formatter__handler {
+      pointer-events: auto;
+      background-color: #6366f1 !important;
+    }
+
     /* Mencegah layout shift */
     #editor {
       min-height: 300px;
@@ -131,30 +174,82 @@
 
 @push('script')
   <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+  <script src="https://unpkg.com/quill-blot-formatter/dist/quill-blot-formatter.min.js"></script>
+
   <script>
-    // PERBAIKAN 2: Bungkus inisialisasi dalam fungsi
-    function initQuill() {
-      // Cek apakah editor sudah ada (mencegah double init)
-      if (document.querySelector('.ql-toolbar')) {
-        return;
-      }
+    // --- 1. Register Module BlotFormatter dengan Benar ---
+    // Pastikan kita menangkap class-nya dengan benar (Support CDN)
+    const BlotFormatter = QuillBlotFormatter.default || QuillBlotFormatter;
+    Quill.register('modules/blotFormatter', BlotFormatter);
 
-      const editorElement = document.querySelector('#editor');
-      if (!editorElement) return; // Stop jika element tidak ada di halaman ini
+    // --- 2. Image Handler Custom (Agar upload ke server) ---
+    function selectLocalImage() {
+      const input = document.createElement('input');
+      input.setAttribute('type', 'file');
+      input.setAttribute('accept', 'image/*');
+      input.click();
 
-      const postBody = document.querySelector('#body');
+      input.onchange = () => {
+        const file = input.files[0];
+        if (/^image\//.test(file.type)) {
+          saveToServer(file);
+        } else {
+          console.warn('You could only upload images.');
+        }
+      };
+    }
 
-      // Initialize Quill
-      const quill = new Quill('#editor', {
-        theme: 'snow',
-        placeholder: 'Tulis konten di sini...',
-        modules: {
-          toolbar: [
+    function saveToServer(file) {
+      const fd = new FormData();
+      fd.append('image', file);
+
+      fetch('/upload-image', {
+          method: 'POST',
+          body: fd,
+          headers: {
+            'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
+          }
+        })
+        .then(response => response.json())
+        .then(result => {
+          const url = result.url;
+          insertToEditor(url);
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('Gagal mengupload gambar.');
+        });
+    }
+
+    function insertToEditor(url) {
+      const range = quill.getSelection();
+      quill.insertEmbed(range.index, 'image', url);
+      quill.setSelection(range.index + 1);
+    }
+
+    // --- 3. Inisialisasi Quill ---
+    const quill = new Quill('#editor', {
+      theme: 'snow',
+      placeholder: 'Tulis ide brilianmu di sini...',
+      modules: {
+        // HANYA gunakan blotFormatter, JANGAN pakai imageResize
+        blotFormatter: {
+          overlay: {
+            style: {
+              border: '2px solid #6366f1', // Warna border saat diklik
+            }
+          }
+        },
+        toolbar: {
+          container: [
             [{
               'header': [1, 2, 3, false]
             }],
             ['bold', 'italic', 'underline', 'strike'],
             ['blockquote', 'code-block'],
+            [{
+              'align': []
+            }], // Dropdown Align
             [{
               'list': 'ordered'
             }, {
@@ -165,29 +260,21 @@
             }, {
               'background': []
             }],
-            ['link', 'clean']
-          ]
+            ['link', 'image', 'clean']
+          ],
+          handlers: {
+            'image': selectLocalImage
+          }
         }
-      });
-
-      // PERBAIKAN 3: Load data dari Textarea ke Quill SETELAH init selesai
-      // Ini mencegah user melihat HTML mentah
-      if (postBody.value) {
-        quill.root.innerHTML = postBody.value;
       }
+    });
 
-      // Sync data saat submit form
-      const postForm = document.querySelector('#post-form');
-      postForm.addEventListener('submit', function(e) {
-        postBody.value = quill.root.innerHTML;
-      });
-    }
+    // --- Form Handling ---
+    const postForm = document.querySelector('#post-form');
+    const postBody = document.querySelector('#body');
 
-    // Jalankan saat halaman pertama kali dimuat
-    document.addEventListener('DOMContentLoaded', initQuill);
-
-    // Jalankan juga saat navigasi Turbo/Livewire (jika ada)
-    document.addEventListener('turbo:load', initQuill); // Untuk Laravel Turbo
-    document.addEventListener('livewire:navigated', initQuill); // Untuk Livewire 3
+    postForm.addEventListener('submit', function(e) {
+      postBody.value = quill.root.innerHTML;
+    });
   </script>
 @endpush
