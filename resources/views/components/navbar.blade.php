@@ -25,7 +25,7 @@
             <x-my-nav-link href="/" :current="request()->is('/')"
               class="px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 {{ request()->is('/') ? 'text-white bg-white/10' : 'text-slate-300 hover:text-white hover:bg-white/5' }}">Home</x-my-nav-link>
             <x-my-nav-link href="/posts" :current="request()->is('posts')"
-              class="px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 {{ request()->is('posts') ? 'text-white bg-white/10' : 'text-slate-300 hover:text-white hover:bg-white/5' }}">Blog</x-my-nav-link>
+              class="px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 {{ request()->is('posts') ? 'text-white bg-white/10' : 'text-slate-300 hover:text-white hover:bg-white/5' }}">Posts</x-my-nav-link>
             <x-my-nav-link href="/about" :current="request()->is('about')"
               class="px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 {{ request()->is('about') ? 'text-white bg-white/10' : 'text-slate-300 hover:text-white hover:bg-white/5' }}">About</x-my-nav-link>
             <x-my-nav-link href="/contact" :current="request()->is('contact')"
@@ -165,7 +165,7 @@
         href="/" :current="request()->is('/')">Home</x-my-nav-link>
       <x-my-nav-link
         class="block px-3 py-2 rounded-md text-base font-medium {{ request()->is('posts') ? 'bg-indigo-600 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}"
-        href="/posts" :current="request()->is('posts')">Blog</x-my-nav-link>
+        href="/posts" :current="request()->is('posts')">Posts</x-my-nav-link>
       <x-my-nav-link
         class="block px-3 py-2 rounded-md text-base font-medium {{ request()->is('about') ? 'bg-indigo-600 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}"
         href="/about" :current="request()->is('about')">About</x-my-nav-link>
