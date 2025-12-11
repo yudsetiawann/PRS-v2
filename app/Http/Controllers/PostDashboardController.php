@@ -17,7 +17,7 @@ class PostDashboardController extends Controller
     {
         $posts = Post::latest()->where('author_id', Auth::user()->id);
 
-        if(request('keyword')){
+        if (request('keyword')) {
             $posts->where('title', 'like', '%' . request('keyword') . '%');
         }
 
@@ -42,18 +42,6 @@ class PostDashboardController extends Controller
             'category_id' => 'required',
             'body' => 'required|min:50'
         ]);
-
-        // Validate versi custom
-        // Validator::make($request->all(), [
-        //     'title' => 'required|unique:posts',
-        //     'category_id' => 'required',
-        //     'body' => 'required'
-        // ], [
-        //     'required' => 'Field :attribute harus diisi',
-        // ], [
-        //     'category_id' =>'category'
-        // ])->validate();
-
 
         Post::create([
             'title' => $request->title,
@@ -80,6 +68,22 @@ class PostDashboardController extends Controller
     public function edit(Post $post)
     {
         return view('dashboard.edit', ['post' => $post]);
+    }
+
+    public function togglePrivacy($slug) // Nama method sesuaikan dengan route Anda
+    {
+        // 1. Cari post berdasarkan slug
+        $post = Post::where('slug', $slug)->firstOrFail();
+
+        // 2. Trik Toggle: Gunakan tanda seru (!) untuk membalik nilai boolean
+        // Jika true jadi false, jika false jadi true
+        $post->is_public = !$post->is_public;
+
+        // 3. Simpan perubahan
+        $post->save();
+
+        // 4. Redirect kembali
+        return back()->with('success', 'Status postingan berhasil diperbarui!');
     }
 
     /**

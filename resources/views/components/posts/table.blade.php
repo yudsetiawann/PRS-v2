@@ -28,7 +28,7 @@
 @endif
 
 <section class="p-4 sm:p-6 antialiased min-h-screen bg-slate-900">
-  <div class="mx-auto max-w-screen-xl px-1 lg:px-12">
+  <div class="mx-auto max-w-screen-xl px-4 lg:px-12">
 
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
       <div>
@@ -47,8 +47,7 @@
       </a>
     </div>
 
-    <div
-      class="bg-slate-800/50 backdrop-blur-sm relative shadow-xl sm:rounded-2xl border border-slate-700/60 overflow-hidden">
+    <div class="bg-slate-800/50 backdrop-blur-sm relative shadow-xl sm:rounded-2xl border border-slate-700/60">
 
       <div
         class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-5 border-b border-slate-700/50">
@@ -78,6 +77,7 @@
             <tr>
               <th scope="col" class="px-6 py-4 font-semibold">No</th>
               <th scope="col" class="px-6 py-4 font-semibold">Judul Post</th>
+              <th scope="col" class="px-6 py-4 font-semibold">Status</th>
               <th scope="col" class="px-6 py-4 font-semibold">Kategori</th>
               <th scope="col" class="px-6 py-4 font-semibold">Tanggal</th>
               <th scope="col" class="px-6 py-4 font-semibold text-right">Aksi</th>
@@ -90,7 +90,25 @@
                   {{ $loop->iteration }}
                 </td>
                 <td class="px-6 py-4 font-medium text-white">
-                  {{ Str::limit($post->title, 40) }}
+                  <a href="/dashboard/{{ $post->slug }}"
+                    class="hover:text-indigo-400 hover:underline transition-colors duration-200">
+                    {{ Str::limit($post->title, 40) }}
+                  </a>
+                </td>
+                <td class="px-6 py-4">
+                  @if ($post->is_public)
+                    <span
+                      class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-500/10 text-green-400 border border-green-500/20"
+                      title="Public Post">
+                      <span class="text-base">🌐</span> Public
+                    </span>
+                  @else
+                    <span
+                      class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-500/10 text-gray-400 border border-gray-500/20"
+                      title="Private Post">
+                      <span class="text-xs">🔒</span> Private
+                    </span>
+                  @endif
                 </td>
                 <td class="px-6 py-4">
                   <span
@@ -118,6 +136,24 @@
                     class="hidden z-50 w-44 bg-slate-800 rounded-xl divide-y divide-slate-700 shadow-2xl border border-slate-700 ring-1 ring-black/5">
                     <ul class="py-1 text-sm text-slate-300"
                       aria-labelledby="post-{{ $post->id }}-dropdown-button">
+
+                      <li>
+                        <form action="{{ route('dashboard.privacy', $post->slug) }}" method="POST">
+                          @csrf
+                          @method('PATCH')
+                          <button type="submit"
+                            class="flex w-full items-center py-2.5 px-4 hover:bg-slate-700 hover:text-white transition-colors text-left">
+                            @if ($post->is_public)
+                              <span class="w-4 h-4 mr-3 flex items-center justify-center text-slate-400">🔒</span>
+                              Make Private
+                            @else
+                              <span class="w-4 h-4 mr-3 flex items-center justify-center text-slate-400">🌐</span>
+                              Make Public
+                            @endif
+                          </button>
+                        </form>
+                      </li>
+
                       <li>
                         <a href="/dashboard/{{ $post->slug }}"
                           class="flex w-full items-center py-2.5 px-4 hover:bg-slate-700 hover:text-white transition-colors">
@@ -200,7 +236,8 @@
       </div>
 
       <h3 class="mb-1 text-lg font-bold text-white">Konfirmasi Penghapusan</h3>
-      <p class="mb-6 text-slate-400 text-sm">Apakah Anda yakin ingin menghapus postingan "<span id="modalTitle" class="text-white font-medium"></span>"?</p>
+      <p class="mb-6 text-slate-400 text-sm">Apakah Anda yakin ingin menghapus postingan "<span id="modalTitle"
+          class="text-white font-medium"></span>"?</p>
 
       <form id="deleteForm" method="POST" class="flex justify-center items-center space-x-3">
         @csrf
@@ -219,23 +256,18 @@
 </div>
 
 <script>
-function openDeleteModal(slug, title) {
-    // 1. Set judul di modal
+  function openDeleteModal(slug, title) {
     document.getElementById('modalTitle').textContent = title;
-
-    // 2. Set action form secara dinamis
     const form = document.getElementById('deleteForm');
     form.action = '/dashboard/' + slug;
-
-    // 3. Tampilkan modal
     const modal = document.getElementById('deleteModal');
     modal.classList.remove('hidden');
     modal.classList.add('flex');
-}
+  }
 
-function closeDeleteModal() {
+  function closeDeleteModal() {
     const modal = document.getElementById('deleteModal');
     modal.classList.add('hidden');
     modal.classList.remove('flex');
-}
+  }
 </script>

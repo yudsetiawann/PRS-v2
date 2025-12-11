@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Post extends Model
 {
-    protected $guarded = ['id'];
+    protected $guarded = ['id', 'is_public'];
 
     protected $with = ['author', 'category'];
 
@@ -55,6 +55,12 @@ class Post extends Model
     public function isLikedBy(User $user)
     {
         return $this->likes->contains('id', $user->id);
+    }
+
+    // Opsional: Scope untuk mengambil post public saja (untuk halaman depan)
+    public function scopePublic($query)
+    {
+        return $query->where('is_public', true);
     }
 
     public function scopeFilter(Builder $query, array $filters): void

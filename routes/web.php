@@ -26,7 +26,11 @@ Route::get('/posts', function () {
     }
     $title = $categoryName ? 'Category: ' . $categoryName : 'All Categories';
 
-    $posts = Post::latest()->filter(request(['search', 'category', 'author']))->paginate(6)->withQueryString();
+    $posts = Post::latest()
+        ->filter(request(['search', 'category', 'author']))
+        ->where('is_public', true) // HANYA ambil yang statusnya public
+        ->paginate(6)
+        ->withQueryString();
     return view('posts', ['title' => $title, 'posts' => $posts]);
 })->name('posts');
 
@@ -107,6 +111,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard/{post:slug}/edit', [PostDashboardController::class, 'edit']);
     Route::patch('/dashboard/{post:slug}', [PostDashboardController::class, 'update']);
     Route::get('/dashboard/{post:slug}', [PostDashboardController::class, 'show']);
+    Route::patch('/dashboard/{post:slug}/privacy', [PostDashboardController::class, 'togglePrivacy'])->name('dashboard.privacy');
 });
 
 // Route::get('/profile/index', function(Post $posts) {
